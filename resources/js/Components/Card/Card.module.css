@@ -1,0 +1,7 @@
+.card-transparent {
+    background-color: transparent;
+    /* Add any additional styles for transparent background */
+  }
+  .card-body{
+    background: gray !important;
+  }

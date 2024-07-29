@@ -1,0 +1,392 @@
+.active {
+    transform: scale(0.95) !important; /* Scale down when clicked */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important; /* Add box shadow when clicked */
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+  }
+  
+
+  /* button */
+  button {
+    margin-right: 5px !important;
+    display: inline-block !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    border: none !important;
+    border-radius: 5px !important;
+    transition: background-color 0.3s ease !important;
+  }
+button:active {
+    transform: scale(0.95) !important; /* Scale down when clicked */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important; /* Add box shadow when clicked */
+    /* Add more styles or effects as needed */
+  }
+  .button {
+    margin-right: 5px !important;
+    display: inline-block !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    border: none !important;
+    border-radius: 5px !important;
+    transition: background-color 0.3s ease !important;
+  }
+.button:active {
+    transform: scale(0.95) !important; /* Scale down when clicked */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important; /* Add box shadow when clicked */
+    /* Add more styles or effects as needed */
+  }
+  
+  /* Additional color variations for buttons */
+  .primary {
+    background-color: #3498db; /* Blue */
+    color: #fff;
+  }
+  
+  .secondary {
+    background-color: #2ecc71; /* Green */
+    color: #fff;
+  }
+  
+  .danger {
+    background-color: #e74c3c; /* Red */
+    color: #fff;
+  }
+  
+  .info {
+    background-color: #1abc9c; /* Turquoise */
+    color: #fff;
+  }
+
+.success {
+    background-color: #2ecc71; /* Green */
+    color: #fff;
+  }
+  
+  .danger {
+    background-color: #e74c3c; /* Red */
+    color: #fff;
+  }
+  
+  .warning {
+    background-color: #f39c12; /* Orange */
+    color: #fff;
+  }
+  
+  .purple {
+    background-color: #9b59b6; /* Purple */
+    color: #fff;
+  }
+  
+  .pink {
+    background-color: #e91e63; /* Pink */
+    color: #fff;
+  }
+  
+  .yellow {
+    background-color: #f1c40f; /* Yellow */
+    color: #fff;
+  }
+  
+  .dark {
+    background-color: #34495e; /* Dark Gray */
+    color: #fff;
+  }
+  
+  .light {
+    background-color: #ecf0f1; /* Light Gray */
+    color: #333;
+  }
+  
+  .teal {
+    background-color: #008080; /* Teal */
+    color: #fff;
+  }
+  
+  .brown {
+    background-color: #795548; /* Brown */
+    color: #fff;
+  }
+  
+  .indigo {
+    background-color: #3f51b5; /* Indigo */
+    color: #fff;
+  }
+  
+  .lime {
+    background-color: #cddc39; /* Lime */
+    color: #333;
+  }
+  
+  .cyan {
+    background-color: #00bcd4; /* Cyan */
+    color: #fff;
+  }
+  
+  .amber {
+    background-color: #ffc107; /* Amber */
+    color: #333;
+  }
+  
+  .grey {
+    background-color: #808080; /* Grey */
+    color: #fff;
+  }
+  .blue {
+    background-color: #3498db; /* Blue */
+    color: #fff;
+  }
+  
+  .gold {
+    background-color: #d4af37; /* Gold */
+    color: #fff;
+  }
+  
+  .silver {
+    background-color: #c0c0c0; /* Silver */
+    color: #333;
+  }
+  
+  .maroon {
+    background-color: #800000; /* Maroon */
+    color: #fff;
+  }
+  
+  .skyblue {
+    background-color: #87ceeb; /* Sky Blue */
+    color: #333;
+  }
+  
+  .olive {
+    background-color: #808000; /* Olive */
+    color: #fff;
+  }
+  
+  .crimson {
+    background-color: #dc143c; /* Crimson */
+    color: #fff;
+  }
+  
+  .turquoise {
+    background-color: #40e0d0; /* Turquoise */
+    color: #fff;
+  }
+  
+  .salmon {
+    background-color: #fa8072; /* Salmon */
+    color: #fff;
+  }
+  
+  .lavender {
+    background-color: #e6e6fa; /* Lavender */
+    color: #333;
+  }
+  
+  .magenta {
+    background-color: #ff00ff; /* Magenta */
+    color: #fff;
+  }
+  
+  .coral {
+    background-color: #ff7f50; /* Coral */
+    color: #fff;
+  }
+  
+  .deepskyblue {
+    background-color: #00bfff; /* Deep Sky Blue */
+    color: #fff;
+  }
+  
+  .darkorange {
+    background-color: #ff8c00; /* Dark Orange */
+    color: #fff;
+  }
+  
+  .seagreen {
+    background-color: #2e8b57; /* Sea Green */
+    color: #fff;
+  }
+  
+  
+
+
+
+
+/* Additional color gradient variations for buttons */
+.primary-gr {
+    background: linear-gradient(to right, #3498db, #2980b9); /* Blue */
+    color: #fff;
+}
+
+.secondary-gr {
+    background: linear-gradient(to right, #2ecc71, #27ae60); /* Green */
+    color: #fff;
+}
+
+.danger-gr {
+    background: linear-gradient(to right, #e74c3c, #c0392b); /* Red */
+    color: #fff;
+}
+
+.info-gr {
+    background: linear-gradient(to right, #1abc9c, #16a085); /* Turquoise */
+    color: #fff;
+}
+
+.success-gr {
+    background: linear-gradient(to right, #2ecc71, #27ae60); /* Green */
+    color: #fff;
+}
+
+.danger-gr {
+    background: linear-gradient(to right, #e74c3c, #c0392b); /* Red */
+    color: #fff;
+}
+
+.warning-gr {
+    background: linear-gradient(to right, #f39c12, #d35400); /* Orange */
+    color: #fff;
+}
+
+.purple-gr {
+    background: linear-gradient(to right, #9b59b6, #8e44ad); /* Purple */
+    color: #fff;
+}
+
+.pink-gr {
+    background: linear-gradient(to right, #e91e63, #c2185b); /* Pink */
+    color: #fff;
+}
+
+.yellow-gr {
+    background: linear-gradient(to right, #f1c40f, #f39c12); /* Yellow */
+    color: #fff;
+}
+
+.dark-gr {
+    background: linear-gradient(to right, #34495e, #2c3e50); /* Dark Gray */
+    color: #fff;
+}
+
+.light-gr {
+    background: linear-gradient(to right, #ecf0f1, #bdc3c7); /* Light Gray */
+    color: #333;
+}
+
+.teal-gr {
+    background: linear-gradient(to right, #008080, #006666); /* Teal */
+    color: #fff;
+}
+
+.brown-gr {
+    background: linear-gradient(to right, #795548, #6d4c41); /* Brown */
+    color: #fff;
+}
+
+.indigo-gr {
+    background: linear-gradient(to right, #3f51b5, #3949ab); /* Indigo */
+    color: #fff;
+}
+
+.lime-gr {
+    background: linear-gradient(to right, #cddc39, #afb42b); /* Lime */
+    color: #333;
+}
+
+.cyan-gr {
+    background: linear-gradient(to right, #00bcd4, #0097a7); /* Cyan */
+    color: #fff;
+}
+
+.amber-gr {
+    background: linear-gradient(to right, #ffc107, #ffa000); /* Amber */
+    color: #333;
+}
+
+.grey-gr {
+    background: linear-gradient(to right, #808080, #616161); /* Grey */
+    color: #fff;
+}
+
+.blue-gr {
+    background: linear-gradient(to right, #3498db, #2980b9); /* Blue Gradient */
+    color: #fff;
+  }
+  
+  .gold-gr {
+    background: linear-gradient(to right, #d4af37, #c99a2e); /* Gold Gradient */
+    color: #fff;
+  }
+  
+  .silver-gr {
+    background: linear-gradient(to right, #c0c0c0, #a9a9a9); /* Silver Gradient */
+    color: #333;
+  }
+  
+  .maroon-gr {
+    background: linear-gradient(to right, #800000, #660000); /* Maroon Gradient */
+    color: #fff;
+  }
+  
+  .skyblue-gr {
+    background: linear-gradient(to right, #87ceeb, #6e7ebc); /* Sky Blue Gradient */
+    color: #333;
+  }
+  
+  .olive-gr {
+    background: linear-gradient(to right, #808000, #686868); /* Olive Gradient */
+    color: #fff;
+  }
+  
+  .crimson-gr {
+    background: linear-gradient(to right, #dc143c, #a31c36); /* Crimson Gradient */
+    color: #fff;
+  }
+  
+  .turquoise-gr {
+    background: linear-gradient(to right, #40e0d0, #34b3a0); /* Turquoise Gradient */
+    color: #fff;
+  }
+  
+  .salmon-gr {
+    background: linear-gradient(to right, #fa8072, #e56b5e); /* Salmon Gradient */
+    color: #fff;
+  }
+  
+  .lavender-gr {
+    background: linear-gradient(to right, #e6e6fa, #cccce0); /* Lavender Gradient */
+    color: #333;
+  }
+  
+  .magenta-gr {
+    background: linear-gradient(to right, #ff00ff, #cc00cc); /* Magenta Gradient */
+    color: #fff;
+  }
+  
+  .coral-gr {
+    background: linear-gradient(to right, #ff7f50, #e57373); /* Coral Gradient */
+    color: #fff;
+  }
+  
+  .deepskyblue-gr {
+    background: linear-gradient(to right, #00bfff, #009acd); /* Deep Sky Blue Gradient */
+    color: #fff;
+  }
+  
+  .darkorange-gr {
+    background: linear-gradient(to right, #ff8c00, #ff751a); /* Dark Orange Gradient */
+    color: #fff;
+  }
+  
+  .seagreen-gr {
+    background: linear-gradient(to right, #2e8b57, #267a57); /* Sea Green Gradient */
+    color: #fff;
+  }
