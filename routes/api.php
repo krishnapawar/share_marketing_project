@@ -41,4 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/transaction', TransactionController::class)->only(['index', 'show']);
     Route::post('/add-fund', [TransactionController::class, 'store']);
     Route::post('/withdrawal', [TransactionController::class, 'withdrawal']);
+    Route::get('/helpAndSuport', [DashboardController::class,'helpAndSuport']);
+    Route::post('/updateProfile', [UserController::class, 'updateProfile']);
 });

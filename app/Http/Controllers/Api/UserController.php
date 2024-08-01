@@ -26,6 +26,7 @@ class UserController extends Controller
             'pancard_number' => 'required|string|min:10|max:10',
             'alternate_mobile_number' => 'nullable|string|min:10|max:15',
             'address' => 'required|string|min:4|max:255',
+            'pin_code'=>'required|numeric|min:4|max:8',
         ]);
 
         $user = User::findOrFail($id);
@@ -46,5 +47,36 @@ class UserController extends Controller
         return $this->sendResponse([
             'message' => 'Profile deleted successfully'
         ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        try {
+            //code...
+            $user = auth()->user();
+
+            if ($request->hasFile('profile_image')) {
+                // Delete the old profile image if it exists
+                if ($user->profile_image && file_exists(public_path('profile_images/' . $user->profile_image))) {
+                    unlink(public_path('profile_images/' . $user->profile_image));
+                }
+                // Store the new profile image
+                $image = $request->file('profile_image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('profile_images'), $imageName);
+                $user->profile_image = $imageName;
+            }
+
+            $user->save();
+
+            return $this->sendResponse(['message' => 'Profile updated successfully', 'user' => $user]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->sendError([$th->getMessage()]);
+        }
     }
 }

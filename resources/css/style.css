@@ -390,3 +390,18 @@ button:active {
     background: linear-gradient(to right, #2e8b57, #267a57); /* Sea Green Gradient */
     color: #fff;
   }
+
+  /* status class */
+
+  /* styles.css */
+.approve, .withdrawal, .completed, .addFund {
+  color: green;
+}
+
+.cancelled, .disapprove {
+  color: red;
+}
+
+.running, .pending {
+  color: orange;
+}
