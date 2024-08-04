@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         return $this->sendResponse([
             'access_token' => $token,
-            'user' => $user,
+            'user' => $user->load('file'),
             'message'=> 'Login successful'
         ]);
     }

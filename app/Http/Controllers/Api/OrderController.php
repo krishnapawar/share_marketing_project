@@ -11,12 +11,18 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
             //code...
-            $data = Order::where('user_id',auth()->id())->latest('id')->get();
-            return $this->sendResponse($data);
+            $data = Order::where('user_id',auth()->id());
+            if($request->status){
+                $data = $data->where('status',$request->status);
+            }else{
+                $data = $data->where('status','<>','running');
+            }
+    
+            return $this->sendResponse($data->latest('id')->get());
         } catch (\Throwable $th) {
             $this->sendError([
                 "message"=>$th->getMessage()

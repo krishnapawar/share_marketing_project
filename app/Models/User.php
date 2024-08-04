@@ -78,4 +78,8 @@ class User extends Authenticatable
     public function wallet(){
         return $this->hasOne(Wallet::class);
     }
+
+    public function file(){
+        return $this->belongsTo(ProjectFile::class);
+    }
 }

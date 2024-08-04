@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Wallet;
+use App\Models\{Wallet,User};
 
 class DashboardController extends Controller
 {
@@ -17,11 +17,8 @@ class DashboardController extends Controller
         try {
             //code...
            $user = auth()->user();
-	   $wallets = Wallet::firstOrNew(['user_id' =>$user->id]);
-           $user->load([
-                'wallet',
-                'loanRequests',
-           ]);
+	       $wallets = Wallet::with()->firstOrNew(['user_id' =>$user->id]);
+ 
 
             $total_balance = $user->wallet->balance;
             $profit = $user->wallet->profit;
@@ -34,6 +31,7 @@ class DashboardController extends Controller
                 'loss' => $loss,
                 'withdrawal' => $withdra,
                 'loan' => $loan,
+                'totatUser'=> User::where('role','0')->count(),
                 ]);
         } catch (\Throwable $th) {
             $this->sendError([

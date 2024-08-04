@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-use App\Models\Wallet;
+use App\Models\{Wallet,Setting};
 use DB;
 
 class TransactionController extends Controller
@@ -25,7 +25,18 @@ class TransactionController extends Controller
         }else{
             $transactions = $transactions->where('type', 'addFund');
         }
-        return $this->sendResponse($transactions->latest('id')->get()->groupBy('date'));
+        $settings = Setting::whereIn('key',['qrCode','bankDatail'])->get();
+        $trans = $transactions->latest('id')->get()
+        ->groupBy('date')->map(function($item,$key){
+            return [
+                'date' => $key,
+                'data' => $item
+                ];
+        })->values()->all();
+        return $this->sendResponse([
+            'transactions' => $trans,
+            'settings' => $settings,
+        ]);
     }
 
     /**
@@ -53,10 +64,12 @@ class TransactionController extends Controller
             $transaction = new Transaction();
             if($request->file('screenshot'))
             {
-                $file = $request->file('screenshot');
-                $filename = time().'.'.$file->getClientOriginalExtension();
-                $file->move(public_path('screenshot'), $filename);
-                $transaction->screenshot = 'screenshot/'.$filename;
+                // $file = $request->file('screenshot');
+                // $filename = time().'.'.$file->getClientOriginalExtension();
+                // $file->move(public_path('screenshot'), $filename);
+                // $transaction->screenshot = 'screenshot/'.$filename;
+
+                $transaction->file_id = $this->uploadFile($request->file('screenshot'),'screenshot',$user->file_id);
 
             }
             if($request->title){

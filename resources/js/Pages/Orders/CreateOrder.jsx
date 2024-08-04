@@ -10,23 +10,22 @@ import SelectInput from "@/Components/SelectInput";
 import Select from 'react-select';
 
 const EditCustomer = ({ auth }) => {
-    const { users, order } = usePage().props;
-    const [totalAmount,SetTotalAmount] = useState(0);
+    const { users } = usePage().props;
+    const [amount,SetAmount] = useState(0);
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        user_id: order.user_id || '',
-        status: order.status || '',
-        date: order.date || '',
-        currency: order.currency || '',
-        price: order.price || 0,
-        type: order.type || '',
-        qty: order.qty || 1,
-        amount: order.qty || 1,
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
+        user_id: '',
+        status: '',
+        date: '',
+        currency:'',
+        price: 0,
+        type: '',
+        qty: 1,
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        patch(route("orders.update",order.id), {
+        post(route("orders.store"), {
             preserveScroll: true,
         });
     };
@@ -40,8 +39,8 @@ const EditCustomer = ({ auth }) => {
     })
 
     useEffect(()=>{
-        data.amount = data.qty * data.price;
-        SetTotalAmount(data.amount);
+        let totalAmount = data.qty * data.price;
+        SetAmount(totalAmount);
     },[data]);
 
     return (
@@ -149,7 +148,7 @@ const EditCustomer = ({ auth }) => {
                                     <InputLabel htmlFor="amount" value="Amount" />
                                     <TextInput
                                         id="amount"
-                                        value={data.amount}
+                                        value={amount}
                                         onChange={(e) => setData("amount", e.target.value)}
                                         type="text"
                                         className="mt-1 block w-full"

@@ -5,6 +5,7 @@ import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 import InputLabel from "@/Components/InputLabel";
 import useConfirm from "@/Components/ConfirmDialog";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 
 const Order = ({ auth }) => {
@@ -44,10 +45,19 @@ const Order = ({ auth }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Customers</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Orders</h2>}
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="flax p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                        <div className="mt-4 text-gray-900 dark:text-gray-100">
+                            <PrimaryButton>
+                                <Link href={route("orders.create")}>
+                                    Create Order
+                                </Link>
+                            </PrimaryButton>
+                        </div>
+                    </div>
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <table className="min-w-full divide-y divide-gray-200">
@@ -58,6 +68,9 @@ const Order = ({ auth }) => {
                                         </th>
                                         <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                             Date
+                                        </th>
+                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            Customer name
                                         </th>
                                         <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                             Status
@@ -94,10 +107,13 @@ const Order = ({ auth }) => {
                                                 {order.date}
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
+                                                {order.user.name ?? ''}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
                                                 
-                                                <InputLabel htmlFor="gender" value="Gender" />
+                                                <InputLabel htmlFor="status" value="Status" />
                                                 <SelectInput
-                                                    id="gender"
+                                                    id="status"
                                                     value={data.status}
                                                     selected={data.status}
                                                     onChange={(e) => handleSubmit(e, order.id, setData("status", e.target.value))}
@@ -132,12 +148,12 @@ const Order = ({ auth }) => {
                                                 >
                                                     Edit
                                                 </Link>
-                                                <button
+                                                {/* <button
                                                     onClick={() => handleDelete(order.id)}
                                                     className="text-red-600 hover:text-red-900"
                                                 >
                                                     Delete
-                                                </button>
+                                                </button> */}
                                             </td>
                                         </tr>)
 })}

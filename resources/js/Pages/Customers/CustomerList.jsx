@@ -2,6 +2,7 @@ import React from "react";
 import { usePage, Link, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Button from "@/Components/Button/Button";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 const CustomerList = ({ auth }) => {
     const { customers } = usePage().props;
@@ -19,12 +20,25 @@ const CustomerList = ({ auth }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Customers</h2>}
+            header={<>
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Customers</h2>
+            </>
+        }
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="flax p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                        <div className="mt-4 text-gray-900 dark:text-gray-100">
+                            <PrimaryButton>
+                                <Link href={route("customers.create")}>
+                                    Create Customer
+                                </Link>
+                            </PrimaryButton>
+                        </div>
+                    </div>
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
+                            
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead>
                                     <tr>
@@ -46,10 +60,10 @@ const CustomerList = ({ auth }) => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
-                                    {customers.data.map((customer) => (
+                                    {customers.data.map((customer,k) => (
                                         <tr key={customer.id}>
                                             <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 dark:text-gray-100">
-                                                {customer.id}
+                                                {k+1}
                                             </td>
                                             <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
                                                 {customer.name}

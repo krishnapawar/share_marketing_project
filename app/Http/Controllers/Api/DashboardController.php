@@ -21,7 +21,7 @@ class DashboardController extends Controller
             //code...
             $user = auth()->user();
 	        $wallets = Wallet::where(['user_id' =>$user->id])->first();
-            $settings = Setting::whereIn('key',['qrCode','bankDatail'])->get();
+            $settings = Setting::with('file')->whereIn('key',['qrCode','bankDatail'])->get();
             if(empty($wallets)){
                 Wallet::create(['user_id' =>$user->id]);
             }

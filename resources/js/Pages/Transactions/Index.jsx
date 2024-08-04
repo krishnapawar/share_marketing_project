@@ -6,14 +6,25 @@ import SelectInput from "@/Components/SelectInput";
 import InputLabel from "@/Components/InputLabel";
 import useConfirm from "@/Components/ConfirmDialog";
 import { FaPen, FaTrash } from "react-icons/fa";
-
+import Select from 'react-select';
 const Order = ({ auth }) => {
-    const { transactions } = usePage().props;
+    const { transactions,users } = usePage().props;
     const [filterData, setFilterData] = useState("");
-    const [filterValue, setFilterValue] = useState("");
+    const [filterValue, setFilterValue] = useState('');
+    const [userId, setUserId] = useState('');
     const confirm = useConfirm();
     let i = 0;
-    const { delete: destroy, get, reset, errors } = useForm();
+    const { delete: destroy, get, reset, errors,data,setData } = useForm();
+
+    const handleSelectChange = (selectedOption) => {
+        // setData("user_id", selectedOption ? selectedOption.value : null);
+        console.log(selectedOption);
+        setUserId(selectedOption ? selectedOption.value : null);
+    };
+
+    const userOptions=users.map((item)=>{
+        return {value:item.id,label:item.name}
+    })
 
     useEffect(() => {
         // Extract filter value from URL
@@ -25,8 +36,14 @@ const Order = ({ auth }) => {
     }, [window.location.search]);
 
     useEffect(() => {
-        if (filterValue) {
-            get(route("transactions.index", { filter: filterValue }), {
+        const queryParams = new URLSearchParams(window.location.search);
+        const filterVl = queryParams.get("filter");
+        const user = queryParams.get("user");
+        if (filterValue || userId) {
+            get(route("transactions.index", { 
+                filter:filterValue ?? filterVl ?? null,
+                user:userId ?? user ?? null
+            }), {
                 preserveScroll: true,
                 onError: (errors) => {
                     reset();
@@ -34,7 +51,7 @@ const Order = ({ auth }) => {
                 },
             });
         }
-    }, [filterValue]);
+    }, [filterValue,userId]);
 
     const handleDelete = async (id) => {
         const isConfirmed = await confirm(
@@ -48,7 +65,6 @@ const Order = ({ auth }) => {
     };
 
     const handleSubmit = async (e, id, status = null) => {
-        console.log("ok handle");
         let dt = {
             id: id,
             status: e.target.value,
@@ -68,9 +84,9 @@ const Order = ({ auth }) => {
         }
     };
 
-    const handleFilter = (e) => {
-        setFilterData(e.target.value);
-        setFilterValue(e.target.value);
+    const handleFilter = (filter) => {
+        setFilterData(filter);
+        setFilterValue(filter);
     };
     return (
         <AuthenticatedLayout
@@ -84,25 +100,38 @@ const Order = ({ auth }) => {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
-                            <InputLabel htmlFor="filter" value="Filter" />
-                            <SelectInput
-                                id="filter"
-                                value={filterData}
-                                selected={filterData}
-                                onChange={(e) => handleFilter(e)}
-                                options={[
-                                    { value: "", label: "Select Filter" },
-                                    { value: "all", label: "All" },
-                                    { value: "addFund", label: "Add Fund" },
-                                    { value: "withdrawal", label: "Withdraw" },
-                                ]}
-                                className="mt-1 block w-full"
-                            />
-                            <InputError
-                                message={errors.gender}
-                                className="mt-2"
-                            />
+                        <div className="flax p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                            <div>
+                                <InputLabel htmlFor="filter" value="Filter" />
+                                <SelectInput
+                                    id="filter"
+                                    value={filterData}
+                                    selected={filterData}
+                                    onChange={(e) => handleFilter(e.target.value)}
+                                    options={[
+                                        { value: "", label: "Select Filter" },
+                                        { value: "all", label: "All" },
+                                        { value: "addFund", label: "Add Fund" },
+                                        { value: "withdrawal", label: "Withdraw" },
+                                    ]}
+                                    className="mt-1 block w-full"
+                                />
+                                <InputError
+                                    message={errors.gender}
+                                    className="mt-2"
+                                />
+                            </div>
+                            {/* <div>
+                                <InputLabel htmlFor="user_id" value="User" />
+                                <Select
+                                    id="user_id"
+                                    value={userOptions.find(option => option.value === data.user_id)}
+                                    onChange={handleSelectChange}
+                                    options={userOptions}
+                                    className="mt-1 block w-full"
+                                />
+                                <InputError message={errors.user_id} className="mt-2" />
+                            </div> */}
                         </div>
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <table className="min-w-full divide-y divide-gray-200">
@@ -113,6 +142,9 @@ const Order = ({ auth }) => {
                                         </th>
                                         <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                             Date
+                                        </th>
+                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            Customer Name
                                         </th>
                                         <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                             ScreenShot
@@ -132,9 +164,9 @@ const Order = ({ auth }) => {
                                         <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                             Balance
                                         </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        {/* <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                             Actions
-                                        </th>
+                                        </th> */}
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
@@ -151,6 +183,9 @@ const Order = ({ auth }) => {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
                                                     {transaction.created_at}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
+                                                    {transaction.user.name ?? ''}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
                                                     {transaction.screenshot ??
@@ -231,7 +266,7 @@ const Order = ({ auth }) => {
                                                         "0"}{" "}
                                                     INR
                                                 </td>
-                                                <td className="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
+                                                {/* <td className="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
                                                     <Link
                                                         href={route(
                                                             "transactions.edit",
@@ -239,9 +274,9 @@ const Order = ({ auth }) => {
                                                         )}
                                                         className="text-indigo-600 hover:text-indigo-900"
                                                     >
-                                                        <FaPen />
-                                                    </Link>
-                                                    <button
+                                                        <FaPen /> Edit
+                                                    </Link> */}
+                                                    {/* <button
                                                         onClick={() =>
                                                             handleDelete(
                                                                 transaction.id
@@ -250,8 +285,8 @@ const Order = ({ auth }) => {
                                                         className="text-red-600 hover:text-red-900"
                                                     >
                                                         <FaTrash />
-                                                    </button>
-                                                </td>
+                                                    </button> */}
+                                                {/* </td> */}
                                             </tr>
                                         );
                                     })}

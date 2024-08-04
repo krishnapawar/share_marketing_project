@@ -17,25 +17,21 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'user_id' => 'required|numeric|max:1',
             'name' => 'required|string|max:255',
             'mobile_number' => 'required|string|min:10|max:15',
-            'dob' => 'required|date_format:d-m-Y',
+            'dob' => 'required|date_format:Y-m-d',
             'gender' => 'required|string|in:F,M,O|max:1',
             'aadhar_number' => 'required|string|min:12|max:12',
             'pancard_number' => 'required|string|min:10|max:10',
             'alternate_mobile_number' => 'nullable|string|min:10|max:15',
             'address' => 'required|string|min:4|max:255',
-            'pin_code'=>'required|numeric|min:4|max:8',
+            'pin_code'=>'required|numeric|min:4',
         ]);
 
         $user = User::findOrFail($id);
         $user->update($validatedData);
-
-        return $this->sendResponse([
-            'user' => $user,
-            'message' => 'Profile updated successfully'
-        ]);
+        $user->message = 'Profile updated successfully';
+        return $this->sendResponse($user->load('file'));
     }
 
 
@@ -60,20 +56,12 @@ class UserController extends Controller
             $user = auth()->user();
 
             if ($request->hasFile('profile_image')) {
-                // Delete the old profile image if it exists
-                if ($user->profile_image && file_exists(public_path('profile_images/' . $user->profile_image))) {
-                    unlink(public_path('profile_images/' . $user->profile_image));
-                }
-                // Store the new profile image
-                $image = $request->file('profile_image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('profile_images'), $imageName);
-                $user->profile_image = $imageName;
+                $user->file_id = $this->uploadFile($request->file('profile_image'),'profile_images',$user->file_id);
             }
 
             $user->save();
 
-            return $this->sendResponse(['message' => 'Profile updated successfully', 'user' => $user]);
+            return $this->sendResponse(['message' => 'Profile updated successfully', 'user' => $user->load('file')]);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->sendError([$th->getMessage()]);

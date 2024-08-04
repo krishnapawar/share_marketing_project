@@ -17,6 +17,20 @@ class SettingsTableSeeder extends Seeder
     {
         DB::table('settings')->insert([
             [
+                'key' => 'qrCode',
+                'value' => 'qrCode',
+                'description' => 'qrCode',
+                'created_at' => Carbon::parse('2024-07-28T20:59:58.000000Z'),
+                'updated_at' => Carbon::parse('2024-07-31T18:30:05.000000Z'),
+            ],
+            [
+                'key' => 'bankDatail',
+                'value' => 'bankDatail',
+                'description' => 'bankDatail',
+                'created_at' => Carbon::parse('2024-07-28T20:59:58.000000Z'),
+                'updated_at' => Carbon::parse('2024-07-31T18:30:05.000000Z'),
+            ],
+            [
                 'key' => 'Email Address',
                 'value' => 'organization@gmail.com',
                 'description' => 'this test email',

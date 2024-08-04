@@ -394,11 +394,15 @@ button:active {
   /* status class */
 
   /* styles.css */
-.approve, .withdrawal, .completed, .addFund {
+.buy,.profit,.approve, .withdrawal, .completed, .addFund {
   color: green;
 }
 
-.cancelled, .disapprove {
+.sell{
+  color: rgb(6, 156, 176);
+}
+
+.loss,.cancelled, .disapprove {
   color: red;
 }
 

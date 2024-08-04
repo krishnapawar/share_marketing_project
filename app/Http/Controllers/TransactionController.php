@@ -23,7 +23,8 @@ class TransactionController extends Controller
         })->paginate(10);
 
         return Inertia::render('Transactions/Index', [
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'users'=>User::where('role','<>',1)->get(),
             ]);
     }
 

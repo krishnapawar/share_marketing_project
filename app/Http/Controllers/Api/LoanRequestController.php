@@ -14,8 +14,8 @@ class LoanRequestController extends Controller
     public function index()
     {
         //
-        $loanRequest = LoanRequest::letast('id')->get();
-        return $this->sendResponse($loanRequest->latest('id')->get());
+        $loanRequest = LoanRequest::latest('id')->get();
+        return $this->sendResponse($loanRequest);
     }
 
     /**
@@ -28,7 +28,11 @@ class LoanRequestController extends Controller
             $request->validate([
                 'amount' => 'required|numeric',
             ]);
-            $loanRequest = LoanRequest::create($request->only('amount'));
+            $loanRequest = LoanRequest::create([
+                'amount'=>$request->amount,
+                'user_id'=>auth()->id(),
+                'status'=>'pending'
+            ]);
             $loanRequest->message ="Your request has been submited.";
             return $this->sendResponse($loanRequest);
         }catch(\Exception $e){
