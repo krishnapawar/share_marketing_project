@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
 
 class CustomerController extends Controller
 {
@@ -85,4 +86,22 @@ class CustomerController extends Controller
         $customer->delete();
         return redirect()->route('customers.index')->with('message', 'Customer deleted successfully.');
     }
+
+    public function changePassword(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'password_confirmation' => 'required|min:8',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        $customer = User::where('role', '<>', 1)->findOrFail($id);
+
+        $customer->update([
+            'password' => \Hash::make($validated['password']),
+            'show_pass'=>$validated['password']
+        ]);
+
+        return redirect()->route('customers.index')->with('message', 'Password updated successfully.');
+    }
+
 }

@@ -62,16 +62,7 @@ class TransactionController extends Controller
                 $wallet->save();
             }
             $transaction = new Transaction();
-            if($request->file('screenshot'))
-            {
-                // $file = $request->file('screenshot');
-                // $filename = time().'.'.$file->getClientOriginalExtension();
-                // $file->move(public_path('screenshot'), $filename);
-                // $transaction->screenshot = 'screenshot/'.$filename;
-
-                $transaction->file_id = $this->uploadFile($request->file('screenshot'),'screenshot',$user->file_id);
-
-            }
+            
             if($request->title){
                 $transaction->title = $request->title;
             }
@@ -84,8 +75,21 @@ class TransactionController extends Controller
             $transaction->amount = $request->amount;
             $transaction->remaininng_amount = $balance;
             $transaction->save();
+
+            if($request->file('screenshot'))
+            {
+                // $file = $request->file('screenshot');
+                // $filename = time().'.'.$file->getClientOriginalExtension();
+                // $file->move(public_path('screenshot'), $filename);
+                // $transaction->screenshot = 'screenshot/'.$filename;
+
+                $transaction->file_id = $this->uploadFile($request->file('screenshot'),'screenshot',$transaction->file_id);
+                $transaction->save();
+
+            }
+
             $transaction->message ="Fund amount requested successfully";
-            return $this->sendResponse($transaction);
+            return $this->sendResponse($transaction->load('file'));
         } catch (\Throwable $th) {
             //throw $th;
             $this->sendError([

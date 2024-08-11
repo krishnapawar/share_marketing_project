@@ -49,8 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('settings', SettingController::class);
     Route::resource('/customers', CustomerController::class);
+    Route::post('/changePassword/{id}', [CustomerController::class,'changePassword'])->name('changePassword');
     Route::resource('/orders', OrderController::class);
     Route::resource('/transactions', TransactionController::class);
+    Route::post('/transactions/updateStatus', [TransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
     Route::post('/updateSetting/{id}', [SettingController::class, 'updateSetting'])->name('updateSetting');
 });
 

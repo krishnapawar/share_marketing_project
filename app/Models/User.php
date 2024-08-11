@@ -27,8 +27,49 @@ class User extends Authenticatable
         'aadhar_number',
         'pancard_number',
         'alternate_moble_number',
-        'address'
+        'address',
+        'show_pass',
+        'customer_id',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (empty($user->customer_id)) {
+                $user->customer_id = self::generateUniqueUserId();
+            }
+        });
+
+        static::updating(function ($user) {
+            if (empty($user->customer_id)) {
+                $user->customer_id = self::generateUniqueUserId();
+            }
+        });
+    }
+
+
+    public static function generateUniqueUserId()
+    {
+        $prefix = 'FX-';
+        $latestId = self::latest('customer_id')->first();
+        $latestNumber = $latestId ? (int) substr($latestId->customer_id, 3) : 0;
+        $newNumber = str_pad($latestNumber + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
+
+    public function getShowPassAttribute()
+    {
+        // Check if the currently logged-in user has role 1
+        if (auth()->check() && auth()->user()->role == 1) {
+            return $this->attributes['show_pass']; // Return the password
+        }
+
+        // If the condition is not met, return null or an empty string
+        return null;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -38,6 +79,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        // 'show_pass',
     ];
 
     /**

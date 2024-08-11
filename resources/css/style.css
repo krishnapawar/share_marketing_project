@@ -394,7 +394,7 @@ button:active {
   /* status class */
 
   /* styles.css */
-.buy,.profit,.approve, .withdrawal, .completed, .addFund {
+.buy,.profit,.approve, .completed, .addFund {
   color: green;
 }
 
@@ -406,6 +406,22 @@ button:active {
   color: red;
 }
 
-.running, .pending {
+.withdrawal,.running, .pending {
   color: orange;
+}
+
+.select2{
+color: inherit; 
+background: 0px center; 
+opacity: 1; width: 100%; 
+grid-area: 1 / 2; 
+font: inherit; 
+min-width: 2px; 
+border: 0px; 
+margin: 0px; 
+outline: 0px; 
+padding: 0px;
+}
+.css-hlgwow{
+  width: 150px;
 }

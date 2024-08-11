@@ -5,53 +5,67 @@ import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 import InputLabel from "@/Components/InputLabel";
 import useConfirm from "@/Components/ConfirmDialog";
-import { FaPen, FaTrash } from "react-icons/fa";
-import Select from 'react-select';
-const Order = ({ auth }) => {
-    const { transactions,users } = usePage().props;
-    const [filterData, setFilterData] = useState("");
-    const [filterValue, setFilterValue] = useState('');
-    const [userId, setUserId] = useState('');
+import { FaRedo } from "react-icons/fa";
+import Select from "react-select";
+import PrimaryButton from "@/Components/PrimaryButton";
+import Table from "@/Components/Table";
+
+const Transaction = ({ auth }) => {
+    const { transactions, users, user_id } = usePage().props;
+    const [filterValue, setFilterValue] = useState("");
+    const [userId, setUserId] = useState(user_id);
+    const [shouldFetch, setShouldFetch] = useState(false);
+    const [userOptions, setUserOptions] = useState([]);
     const confirm = useConfirm();
-    let i = 0;
-    const { delete: destroy, get, reset, errors,data,setData } = useForm();
+    const { delete: destroy, get, post, reset, errors, setData } = useForm();
 
-    const handleSelectChange = (selectedOption) => {
-        // setData("user_id", selectedOption ? selectedOption.value : null);
-        console.log(selectedOption);
-        setUserId(selectedOption ? selectedOption.value : null);
-    };
-
-    const userOptions=users.map((item)=>{
-        return {value:item.id,label:item.name}
-    })
-
+    // Prepare user options for select input
     useEffect(() => {
-        // Extract filter value from URL
-        const queryParams = new URLSearchParams(window.location.search);
-        const filterValue = queryParams.get("filter");
-        if (filterValue) {
-            setFilterData(filterValue);
-        }
-    }, [window.location.search]);
+        const usersData = users.map((item) => ({
+            value: item.id,
+            label: item.name,
+        }));
+        setUserOptions(usersData);
+    }, [users]);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
-        const filterVl = queryParams.get("filter");
-        const user = queryParams.get("user");
-        if (filterValue || userId) {
-            get(route("transactions.index", { 
-                filter:filterValue ?? filterVl ?? null,
-                user:userId ?? user ?? null
-            }), {
-                preserveScroll: true,
-                onError: (errors) => {
-                    reset();
-                    console.log("errors", errors);
-                },
-            });
+        const filter = queryParams.get("filter");
+        if (filter) {
+            setFilterValue(filter);
         }
-    }, [filterValue,userId]);
+        if (userId) {
+            setUserId(userId);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (shouldFetch) {
+            const fetchTransactions = async () => {
+                try {
+                    await get(
+                        route("transactions.index", {
+                            filter: filterValue,
+                            userId: userId,
+                        }),
+                        {
+                            preserveScroll: true,
+                            onError: (errors) => {
+                                reset();
+                                console.log("errors", errors);
+                            },
+                        }
+                    );
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    setShouldFetch(false);
+                }
+            };
+
+            fetchTransactions();
+        }
+    }, [shouldFetch, filterValue, userId, get, reset]);
 
     const handleDelete = async (id) => {
         const isConfirmed = await confirm(
@@ -64,30 +78,90 @@ const Order = ({ auth }) => {
         }
     };
 
-    const handleSubmit = async (e, id, status = null) => {
-        let dt = {
-            id: id,
-            status: e.target.value,
-        };
+    const handleSubmit = async (e, id, setData) => {
         e.preventDefault();
+        let status = e.target.value;
+        setData("status", status);
         const isConfirmed = await confirm(
-            "Are you sure you want to change Transaction Status?"
+            `Are you sure you want to change the transaction status to "${status}"? This action is irreversible.`
         );
         if (isConfirmed) {
-            get(route("transactions.index", dt), {
+            post(route("transactions.updateStatus", { id, status: status }), {
                 preserveScroll: true,
                 onError: (errors) => {
                     reset();
                     console.log("errors", errors);
+                },
+                onSuccess: (result) => {
+                    console.log("result", result);
+                    // toast.success('Transaction status updated successfully.');
                 },
             });
         }
     };
 
     const handleFilter = (filter) => {
-        setFilterData(filter);
         setFilterValue(filter);
+        setShouldFetch(true);
     };
+
+    const handleUserChange = (selectedOption) => {
+        setUserId(selectedOption ? selectedOption.value : null);
+        setShouldFetch(true);
+    };
+
+    const handleReset = () => {
+        setFilterValue("");
+        setUserId("");
+        setShouldFetch(true);
+    };
+
+    const columns = [
+        { key: 'id', label: 'ID' },
+        { key: 'created_at', label: 'Date' },
+        { key: 'user.name', label: 'Customer Name' },
+        {
+            key: 'file',
+            label: 'ScreenShot',
+            render: (transaction) =>
+                transaction.type === "addFund" ? (
+                    <img
+                        src={transaction.file ? transaction.file.name : "-"}
+                        alt="Screenshot"
+                    />
+                ) : (
+                    "-"
+                ),
+        },
+        {
+            key: 'status',
+            label: 'Status',
+            render: (transaction) => (
+                <div style={{ width: "127px" }}>
+                    <InputLabel htmlFor="status" value="Status" />
+                    <SelectInput
+                        id="status"
+                        value={transaction.status}
+                        onChange={(e) => handleSubmit(e, transaction.id, setData)}
+                        options={[
+                            { value: "", label: "Select Status" },
+                            { value: "cancelled", label: "Cancelled" },
+                            { value: "approve", label: "Approved" },
+                            { value: "pending", label: "Pending" },
+                        ]}
+                        className={`${transaction.status}  mt-1 block w-full `}
+                        readOnly={transaction.status=='approve' ? true:false}
+                    />
+                    <InputError message={errors.status} className="mt-2" />
+                </div>
+            ),
+        },
+        { key: 'type', label: 'Type', render: (transaction) => <span  className={transaction.type}>{transaction.type}</span> },
+        { key: 'description', label: 'Remarks' },
+        { key: 'amount', label: 'Amount', render: (transaction) => `${transaction.amount ?? "0"} INR` },
+        { key: 'remaining_amount', label: 'Balance', render: (transaction) => `${transaction.remaining_amount ?? "0"} INR` },
+    ];
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -100,13 +174,12 @@ const Order = ({ auth }) => {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="flax p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                        <div className="flex p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
                             <div>
                                 <InputLabel htmlFor="filter" value="Filter" />
                                 <SelectInput
                                     id="filter"
-                                    value={filterData}
-                                    selected={filterData}
+                                    value={filterValue}
                                     onChange={(e) => handleFilter(e.target.value)}
                                     options={[
                                         { value: "", label: "Select Filter" },
@@ -115,183 +188,31 @@ const Order = ({ auth }) => {
                                         { value: "withdrawal", label: "Withdraw" },
                                     ]}
                                     className="mt-1 block w-full"
+                                    style={{    height: "38px"}}
                                 />
-                                <InputError
-                                    message={errors.gender}
-                                    className="mt-2"
-                                />
+                                <InputError message={errors.filter} className="mt-2" />
                             </div>
-                            {/* <div>
+                            <div className="ml-4">
                                 <InputLabel htmlFor="user_id" value="User" />
                                 <Select
                                     id="user_id"
-                                    value={userOptions.find(option => option.value === data.user_id)}
-                                    onChange={handleSelectChange}
+                                    value={userOptions.find((option) => option.value == userId)}
+                                    onChange={handleUserChange}
                                     options={userOptions}
                                     className="mt-1 block w-full"
                                 />
                                 <InputError message={errors.user_id} className="mt-2" />
-                            </div> */}
+                            </div>
+                            <div className="ml-4">
+                                <PrimaryButton onClick={handleReset} className="mt-6">
+                                    <FaRedo className="mr-2" />
+                                </PrimaryButton>
+                            </div>
                         </div>
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead>
-                                    <tr>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            ID
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Date
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Customer Name
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            ScreenShot
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Status
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Type
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Remarks
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Amount
-                                        </th>
-                                        <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Balance
-                                        </th>
-                                        {/* <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Actions
-                                        </th> */}
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
-                                    {transactions.data.map((transaction) => {
-                                        const { data, setData, reset, errors } =
-                                            useForm({
-                                                id: transaction.id,
-                                                status: transaction.status,
-                                            });
-                                        return (
-                                            <tr key={transaction.id}>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 dark:text-gray-100">
-                                                    {(i += 1)}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.created_at}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.user.name ?? ''}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.screenshot ??
-                                                        "-"}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    <div
-                                                        style={{
-                                                            width: "127px",
-                                                        }}
-                                                    >
-                                                        <InputLabel
-                                                            htmlFor="status"
-                                                            value="Status"
-                                                        />
-                                                        <SelectInput
-                                                            id="status"
-                                                            value={data.status}
-                                                            selected={
-                                                                data.status
-                                                            }
-                                                            onChange={(e) =>
-                                                                handleSubmit(
-                                                                    e,
-                                                                    transaction.id,
-                                                                    setData(
-                                                                        "status",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                )
-                                                            }
-                                                            options={[
-                                                                {
-                                                                    value: "",
-                                                                    label: "Select Status",
-                                                                },
-                                                                {
-                                                                    value: "cancelled",
-                                                                    label: "Cancelled",
-                                                                },
-                                                                {
-                                                                    value: "approve",
-                                                                    label: "Approve",
-                                                                },
-                                                                {
-                                                                    value: "disapprove",
-                                                                    label: "Disapprove",
-                                                                },
-                                                                {
-                                                                    value: "pending",
-                                                                    label: "Pending",
-                                                                },
-                                                            ]}
-                                                            className={data.status+" mt-1 block w-full"}
-                                                        />
-                                                        <InputError
-                                                            message={
-                                                                errors.status
-                                                            }
-                                                            className="mt-2"
-                                                        />
-                                                    </div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.type}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.description ??
-                                                        "-"}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.amount ?? "0"}{" "}
-                                                    INR
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    {transaction.remaining_amount ??
-                                                        "0"}{" "}
-                                                    INR
-                                                </td>
-                                                {/* <td className="px-4 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400">
-                                                    <Link
-                                                        href={route(
-                                                            "transactions.edit",
-                                                            transaction.id
-                                                        )}
-                                                        className="text-indigo-600 hover:text-indigo-900"
-                                                    >
-                                                        <FaPen /> Edit
-                                                    </Link> */}
-                                                    {/* <button
-                                                        onClick={() =>
-                                                            handleDelete(
-                                                                transaction.id
-                                                            )
-                                                        }
-                                                        className="text-red-600 hover:text-red-900"
-                                                    >
-                                                        <FaTrash />
-                                                    </button> */}
-                                                {/* </td> */}
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+
+                            <Table columns={columns} data={transactions.data} />
+                            
                             <div className="mt-4">
                                 {transactions.links.map((link) => (
                                     <Link
@@ -302,9 +223,7 @@ const Order = ({ auth }) => {
                                                 ? "bg-blue-500 text-white"
                                                 : "bg-white text-gray-700"
                                         }`}
-                                        dangerouslySetInnerHTML={{
-                                            __html: link.label,
-                                        }}
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
                                     ></Link>
                                 ))}
                             </div>
@@ -316,4 +235,4 @@ const Order = ({ auth }) => {
     );
 };
 
-export default Order;
+export default Transaction;

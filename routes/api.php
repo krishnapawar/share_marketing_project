@@ -10,7 +10,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Api\Auth\{
     AuthenticatedSessionController,
-    RegisteredUserController
+    RegisteredUserController,
+    PasswordController
 };
 use App\Http\Controllers\Api\{
     UserController,
@@ -30,7 +31,6 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke
 Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->middleware(['throttle:6,1']);
 Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])->middleware('auth')->name('verification.notice');
 Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']);
-Route::put('/user/password', [PasswordController::class, 'update']);
 
 
 // Protected routes
@@ -45,4 +45,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/helpAndSuport', [DashboardController::class,'helpAndSuport']);
     Route::post('/updateProfile', [UserController::class, 'updateProfile']);
     Route::apiResource('/loanRequest', LoanRequestController::class);
+    Route::put('/restUserPassword', [PasswordController::class, 'update']);
 });
