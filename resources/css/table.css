@@ -1,0 +1,67 @@
+/* Base Table Styles */
+.responsive-table {
+    width: 100%; /* Ensures the table occupies full width */
+    border-collapse: collapse;
+}
+
+.responsive-table th, 
+.responsive-table td { 
+    padding: 10px; /* Increased padding for better readability */
+}
+.swal2-cancel,.swal2-deny{
+    display: none !important;
+}
+
+/* .responsive-table img{
+    width: 100%;
+    height: 100%;
+} */
+
+/* Responsive Design for Small Screens */
+@media screen and (max-width: 767px) {
+    .responsive-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap; /* Prevents table from wrapping */
+        /* border: 1px solid #ddd; */
+    }
+    .responsive-table th, 
+    .responsive-table td { 
+        padding: 10px; /* Increased padding for better readability */
+        padding-left:150px !important;
+    }
+    .responsive-table thead {
+        display: none; /* Hides the table header on small screens */
+    }
+    .responsive-table tr {
+        display: block;
+        margin-bottom: 10px; /* Adds space between rows */
+        border-bottom: 2px solid black; /* Adds a black bottom border to rows */
+    }
+    .responsive-table td {
+        display: block;
+        text-align: left;
+        position: relative;
+        padding-left: 50%; /* Space for the label */
+        border: 2px solid #ddd; /* Adds border around cells */
+        margin: 12px 0px 0px 0px; /* Adds space above the cell */
+    }
+    .responsive-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+        top: 0;
+        /* background: #f9f9f9; Background color for labels */
+        /* border-bottom: 1px solid #ddd; Border below the label */
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+}
+
+
+
