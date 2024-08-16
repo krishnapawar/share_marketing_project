@@ -108,6 +108,7 @@ class TransactionController extends Controller
             if($wallet){
                 if($wallet->balance >= $request->amount){
                     $wallet->balance -= $request->amount;
+                    $wallet->withdrawal += $request->amount;
                     $wallet->save();
                     $transaction = new Transaction();
                     $transaction->user_id = $request->user()->id;

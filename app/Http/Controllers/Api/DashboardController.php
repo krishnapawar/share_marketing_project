@@ -49,4 +49,21 @@ class DashboardController extends Controller
             ]);
         }
     }
+    public function helpAndSuport()
+    {
+        $settings = collect();
+        $settings->push([
+            'key' => 'Contact_No',
+            "description"=>"Contact No",
+            'value' => '71111111111',
+        ]);
+        $settings->push([
+            'key' => 'Email',
+            "description"=>"Email",
+            'value' => 'test@test.com',
+        ]);
+        return $this->sendResponse([
+            'helpAndSuports' => $settings,
+        ]);
+    }
 }

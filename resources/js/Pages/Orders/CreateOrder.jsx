@@ -152,7 +152,6 @@ const EditCustomer = ({ auth }) => {
                                         onChange={(e) => setData("amount", e.target.value)}
                                         type="text"
                                         className="mt-1 block w-full"
-                                        readOnly
                                     />
                                     <InputError message={errors.amount} className="mt-2" />
                                 </div>                 

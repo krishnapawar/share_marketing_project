@@ -119,7 +119,9 @@ const Transaction = ({ auth }) => {
     const columns = [
         { key: 'id', label: 'ID' },
         { key: 'created_at', label: 'Date' },
-        { key: 'user.name', label: 'Customer Name' },
+        { key: 'user.name', label: 'Customer Name', render:(data)=>{
+            return data.user.name ?? '-';
+        } },
         {
             key: 'file',
             label: 'ScreenShot',
@@ -211,22 +213,8 @@ const Transaction = ({ auth }) => {
                         </div>
                         <div className="p-6 text-gray-900 dark:text-gray-100">
 
-                            <Table columns={columns} data={transactions.data} />
-                            
-                            <div className="mt-4">
-                                {transactions.links.map((link) => (
-                                    <Link
-                                        key={link.label}
-                                        href={link.url}
-                                        className={`mr-2 px-4 py-2 border rounded-lg ${
-                                            link.active
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-white text-gray-700"
-                                        }`}
-                                        dangerouslySetInnerHTML={{ __html: link.label }}
-                                    ></Link>
-                                ))}
-                            </div>
+                            <Table columns={columns} data={transactions.data} paginate={transactions}/>
+
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\{
     CustomerController,
     OrderController,
     TransactionController,
+    LoanRequestController
 };
 
 use Illuminate\Foundation\Application;
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/transactions', TransactionController::class);
     Route::post('/transactions/updateStatus', [TransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
     Route::post('/updateSetting/{id}', [SettingController::class, 'updateSetting'])->name('updateSetting');
+    Route::resource('/loanRequest', LoanRequestController::class);
 });
 
 require __DIR__.'/auth.php';

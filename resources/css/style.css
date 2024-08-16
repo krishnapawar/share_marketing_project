@@ -394,7 +394,7 @@ button:active {
   /* status class */
 
   /* styles.css */
-.buy,.profit,.approve, .completed, .addFund {
+.buy,.profit,.approve,.approved, .completed, .addFund {
   color: green;
 }
 

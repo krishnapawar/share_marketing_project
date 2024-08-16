@@ -129,17 +129,8 @@ const CustomerList = ({ auth }) => {
                                     columns={columns}
                                     data={customers.data}
                                     actions={false} // Set to true if you want to use default actions
+                                    paginate={customers}
                                 />
-                            </div>
-                            <div className="mt-4">
-                                {customers.links.map((link) => (
-                                    <Link
-                                        key={link.label}
-                                        href={link.url}
-                                        className={`mr-2 px-4 py-2 border rounded-lg ${link.active ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'}`}
-                                        dangerouslySetInnerHTML={{ __html: link.label }}
-                                    ></Link>
-                                ))}
                             </div>
                         </div>
                     </div>

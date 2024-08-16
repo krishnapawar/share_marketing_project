@@ -14,6 +14,7 @@ const navLinks = [
     { name: 'Profile', routeName: 'profile.edit' },
     { name: 'Customers', routeName: 'customers.index' },
     { name: 'Orders', routeName: 'orders.index' },
+    { name: 'Loan Request', routeName: 'loanRequest.index' },
     { name: 'Transactions', routeName: 'transactions.index' },
     { name: 'Settings', routeName: 'settings.index' },
     { name: 'Logout', routeName: 'logout', method: 'post' }
