@@ -35,7 +35,7 @@ const EditCustomer = ({ auth }) => {
     };
 
     const userOptions=users.map((item)=>{
-        return {value:item.id,label:item.name}
+        return {value:item.id,label:item.customer_id+" - "+item.name}
     })
 
     useEffect(()=>{
@@ -101,9 +101,9 @@ const EditCustomer = ({ auth }) => {
                                             selected={data.type}
                                             onChange={(e) => setData("type", e.target.value)}
                                             options={[
-                                                { value: '', label: 'Select type' },
+                                                // { value: '', label: 'Select type' },
                                                 { value: 'buy', label: 'Buy' },
-                                                { value: 'sell', label: 'Sell' },
+                                                // { value: 'sell', label: 'Sell' },
                                             ]}
                                             className={data.type+" mt-1 block w-full"}
                                         />

@@ -4,21 +4,24 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
 import useConfirm from "@/Components/ConfirmDialog";
-import { FaKey, FaLock, FaPen, FaTrash } from "react-icons/fa";
+import { FaLock, FaPen, FaTrash, FaQuestionCircle } from "react-icons/fa";
 import Modal from "@/Components/Modal/Modal";
 import ModalBody from "@/Components/Modal/ModalBody";
 import ModalTitle from "@/Components/Modal/ModalTitle";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
+import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 import { Transition } from "@headlessui/react";
 import ModalFooter from "@/Components/Modal/ModalFooter";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Swal from "sweetalert2";
+import UseSearch from "@/CustomHook/UseSearch";
+
 
 const CustomerList = ({ auth }) => {
     const { customers } = usePage().props;
-    const { delete: destroy, post, data, setData, reset, errors, recentlySuccessful, processing } = useForm({
+    const { delete: destroy, get, post, put, data, setData, reset, errors, recentlySuccessful, processing } = useForm({
         password: '',
         password_confirmation: '',
     });
@@ -64,6 +67,45 @@ const CustomerList = ({ auth }) => {
         reset('password', 'password_confirmation');
     };
 
+    // account status functoinality
+
+    const [statusModelData, setStatusModelData] = useState({
+        status: "",
+        remark: "",
+    });
+    const [StatusShowModal, setStatusShowModal] = useState(false);
+
+    const openStatusModal = (userData) => {
+        setStatusModelData(userData);
+        setData("status", userData.status);
+        setStatusShowModal(true);
+    };
+    const statusModalClose = () => {
+        setStatusShowModal(false);
+    };
+    const handleSubmit = async (userData) => {
+        const isConfirmed = await confirm(
+            `Are you sure you want to ${data.status} ${userData.name}'s Account ?`
+        );
+        if (isConfirmed) {
+            const payload= { id:userData.id, status:data.status };
+            put(route("customers.update",userData.id,payload), {
+                preserveScroll: true,
+                onError: (errors) => {
+                    reset();
+                    Swal.fire("Error", "Error updating transaction", "error");
+
+                    console.log("errors", errors);
+                },
+                onSuccess: (result) => {
+                    setStatusShowModal(false);
+                    reset();
+                    Swal.fire("Success", result.success, "success");
+                },
+            });
+        }
+    };
+
     const columns = [
         { key: 'id', label: 'ID', render: (item, index) => index + 1 },
         { key: 'customer_id', label: 'Customer Id' },
@@ -71,6 +113,20 @@ const CustomerList = ({ auth }) => {
         { key: 'email', label: 'Email' },
         { key: 'show_pass', label: 'Password' },
         { key: 'mobile_number', label: 'Mobile Number' },
+        { key: 'status', label: 'Account Status', render: (item) => (
+            <Link
+                onClick={(e) => {
+                    e.preventDefault(); openStatusModal(item);
+                }}
+                className={`${
+                    "bg-" + item.status
+                } badge  mt-1 block w-full width-100`}
+
+                data-toggle="tooltip" data-placement="top" title="Update Account Request"
+            >
+                {item.status}
+            </Link>
+        ) },
         {
             key: 'actions',
             label: 'Actions',
@@ -114,6 +170,9 @@ const CustomerList = ({ auth }) => {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="flex p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                        
+                        <UseSearch action={route("customers.index")} />
+                        
                         <div className="mt-4 text-gray-900 dark:text-gray-100">
                             <PrimaryButton>
                                 <Link href={route("customers.create")}>
@@ -189,6 +248,73 @@ const CustomerList = ({ auth }) => {
                                         leaveTo="opacity-0"
                                     >
                                         <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                                    </Transition>
+                                </div>
+                            </ModalFooter>
+                        </form>
+                    </div>
+                </ModalBody>
+            </Modal>
+
+            {/* approved and canncelled account */}
+            <Modal
+                maxWidth="sm"
+                show={StatusShowModal}
+                onClose={statusModalClose}
+            >
+                <ModalBody icon={<FaQuestionCircle />}>
+                    <ModalTitle title="Update Account Status" />
+                    <div className="p-6 text-gray-900 dark:text-gray-100">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSubmit(statusModelData);
+                            }}
+                        >
+                            <div>
+                                <InputLabel htmlFor="status" value="Status" />
+                                <SelectInput
+                                    id="status"
+                                    value={data.status || ''}
+                                    onChange={(e) => setData('status', e.target.value)}
+                                    options={[
+                                        { value: '', label: 'Select Status' },
+                                        { value: 'actived', label: 'Actived' },
+                                        { value: 'deactived', label: 'Deactived' },
+                                        { value: 'pending', label: 'Pending' },
+                                    ]}
+                                    className={data.status+" mt-1 block w-full"}
+                                />
+                                <InputError message={errors.status} className="mt-2" />
+                            </div>
+                            <ModalFooter>
+                                <div className="flex items-center gap-4 mt-4">
+                                    <SecondaryButton
+                                        type="button"
+                                        disabled={processing}
+                                        onClick={statusModalClose}
+                                    >
+                                        Close
+                                    </SecondaryButton>
+                                </div>
+                                <div className="flex items-center gap-4 mt-4">
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={processing}
+                                    >
+                                        Save
+                                    </PrimaryButton>
+
+                                    <Transition
+                                        show={recentlySuccessful}
+                                        enter="transition ease-in-out"
+                                        enterFrom="opacity-0"
+                                        leave="transition ease-in-out"
+                                        leaveTo="opacity-0"
+                                    >
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            Saved.
+                                        </p>
                                     </Transition>
                                 </div>
                             </ModalFooter>

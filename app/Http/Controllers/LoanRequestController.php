@@ -11,10 +11,20 @@ class LoanRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $loanRequest = LoanRequest::latest('id')->with('user')->paginate(10);
+        $loanRequest = LoanRequest::when($request->search, function ($q) use ($request) {
+            // Apply search filter on the LoanRequest status
+            $q->where('status', 'like', '%' . $request->search . '%')
+              ->orWhereHas('user', function ($q) use ($request) {
+                  // Apply search filter on the related user's name
+                  $q->where('name', 'like', '%' . $request->search . '%');
+              });
+        })
+        ->latest('id')
+        ->with('user')
+        ->paginate(10);        
         return Inertia::render('LoanRequest/Index',[
             'loanRequests' => $loanRequest
         ]);

@@ -32,7 +32,11 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-
+        if(auth()->user()->role!=1)
+        {
+            auth()->logout();
+            return redirect()->back()->with(['error','Invailid credential']);
+        }
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

@@ -67,4 +67,29 @@ class UserController extends Controller
             return $this->sendError([$th->getMessage()]);
         }
     }
+    public function addCustomerBankDetail(Request $request)
+    {
+        $request->validate([
+            'bank_name'=>'required|min:3',
+            'bank_branch_name'=>'required|min:3',
+            'bank_ifc_code'=>'required|min:3',
+            'bank_account_no'=>'required|min:6',
+        ]);
+
+        try {
+            //code...
+            $user = auth()->user();
+            $user->bank_name = $request->bank_name;
+            $user->bank_branch_name = $request->bank_branch_name;
+            $user->bank_ifc_code = $request->bank_ifc_code;
+            $user->bank_account_no = $request->bank_account_no;
+
+            $user->save();
+
+            return $this->sendResponse(['message' => 'Profile updated successfully', 'user' => $user->load('file')]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->sendError([$th->getMessage()]);
+        }
+    }
 }

@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\{
     User,
-    Order
+    Order,
+    Wallet
 };
 use Inertia\Inertia;
 
@@ -24,7 +25,15 @@ class OrderController extends Controller
                 'status' => $request->status
             ]);
         }
-        $orders = Order::with('user')->latest('id')->paginate();
+        $orders = Order::when($request->search,function($q) use($request){
+            $q->where('status','like','%'.$request->search.'%')
+            ->Orwhere('profit_loss_status','like','%'.$request->search.'%')
+            ->Orwhere('type','like','%'.$request->search.'%')
+            ->orWhereHas('user', function ($q) use ($request) {
+                // Apply search filter on the related user's name
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
+        })->with('user')->latest('id')->paginate();
         return Inertia::render('Orders/Index', [
             'orders' => $orders,
             ]);
@@ -128,5 +137,48 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function orderSell(Request $request)
+    {
+        //
+        if($request->has('id') && $request->input('id') > 0 && $request->has('selling_amount')){
+            $id = $request->input('id');
+            $selling_amount = $request->input('selling_amount');
+            $order = Order::find($id);
+            $wallet = Wallet::where('user_id',$order->user_id)->first();
+            if($order->status == 'completed' || $order->type == 'sell'){
+                return redirect()->route('orders.index')->with(
+                    'error',
+                    'Order is already completed'
+                );
+            }
+            $order->status = 'completed';
+            $order->selling_amount = $selling_amount;
+            $order->profit_loss_status = $order->amount > $selling_amount ? 'loss':'profit';
+            $order->type = 'sell';
+            $order->selling_at = now();
+            if($order->profit_loss_status == 'loss'){
+                $order->profit_loss_amount = $order->amount - $selling_amount;
+            }else{
+                $order->profit_loss_amount = $selling_amount - $order->amount;
+            }
+            $order->save();
+            
+            if(!empty($wallet)){
+                $wallet->balance += $selling_amount;
+            }else {
+                $wallet = new Wallet;
+                $wallet->user_id = $order->user_id;
+                $wallet->balance = $selling_amount;
+            }
+            $wallet->save();
+
+            
+
+        }else{
+            return redirect()->back()->with('error', 'Invalid request');
+        }
+        return redirect()->route('orders.index')->with('success', 'Order Sold successfully');
     }
 }

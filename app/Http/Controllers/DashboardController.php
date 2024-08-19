@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{Wallet,User};
+use App\Models\{Wallet,User,Order};
 
 class DashboardController extends Controller
 {
@@ -27,8 +27,8 @@ class DashboardController extends Controller
             $loan = $user->wallet->loan;
             return $this->sendResponse([
                 'total_balance' => $total_balance,
-                'profit' => $profit,
-                'loss' => $loss,
+                'profit' => Order::where(['profit_loss_status'=>'profit','user_id'=>auth()->id()])->sum('profit_loss_amount'),
+                'loss' => Order::where(['profit_loss_status'=>'loss','user_id'=>auth()->id()])->sum('profit_loss_amount'),
                 'withdrawal' => $withdra,
                 'loan' => $loan,
                 'totatUser'=> User::where('role','0')->count(),

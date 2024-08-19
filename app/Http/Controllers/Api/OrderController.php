@@ -21,8 +21,16 @@ class OrderController extends Controller
             }else{
                 $data = $data->where('status','<>','running');
             }
-    
-            return $this->sendResponse($data->latest('id')->get());
+            if($request->type){
+                $data = $data->where('type',$request->type);
+            }
+
+            if($request->id){
+                $orderData = $data->where('id',$request->id)->first();
+            }else{
+                $orderData = $data->latest('id')->get();
+            }
+            return $this->sendResponse($orderData);
         } catch (\Throwable $th) {
             $this->sendError([
                 "message"=>$th->getMessage()

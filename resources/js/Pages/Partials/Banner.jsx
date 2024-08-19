@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaAndroid } from 'react-icons/fa';
 
 const Banner = () => {
     return (
@@ -10,12 +11,7 @@ const Banner = () => {
                 <div className="flex justify-center space-x-4">
                     <a href="https://play.google.com/store/apps/details?id=your.android.app" target="_blank" rel="noopener noreferrer">
                         <button className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">
-                            Download for Android
-                        </button>
-                    </a>
-                    <a href="https://apps.apple.com/us/app/your-ios-app/id123456789" target="_blank" rel="noopener noreferrer">
-                        <button className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-                            Download for iOS
+                            <div className='flex'><FaAndroid title='app' className='mr-2 mt-1'/> Download for Android</div>
                         </button>
                     </a>
                 </div>

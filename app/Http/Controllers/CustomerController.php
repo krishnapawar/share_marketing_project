@@ -9,9 +9,16 @@ use Illuminate\Validation\Rules;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $customers = User::where('role','<>',1)->latest('id')->paginate(10); // Adjust the pagination count as needed
+        
+        $customers = User::where('role','<>',1)
+        ->when($request->search,function($q) use($request){
+            $q->where('name','like','%'.$request->search.'%')
+            ->orWhere('email','like','%'.$request->search.'%')
+            ->orWhere('customer_id','like','%'.$request->search.'%');
+        })
+        ->latest('id')->paginate(10); // Adjust the pagination count as needed
         return Inertia::render('Customers/CustomerList', [
             'customers' => $customers,
         ]);
@@ -58,20 +65,30 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'mobile_number' => 'required|min:10|max:14',
-            'address' => 'required',
-            'gender' => 'nullable|in:F,M,O',
-            'aadhar_number'=> 'required|min:10|max:14',
-            'pancard_number'=> 'required|min:10|max:14',
-            'alternate_moble_numbe'=> 'nullable|min:10|max:14',
-            'dob'=> 'nullable|date_format:Y-m-d',
-        ]);
+        
         try {
-            $customer = User::findOrFail($id);
-            $customer->update($request->all());
+            if( $request->has('status') && $request->status !=""){
+                User::where('id', $request->id)
+                ->update([
+                    'status' => $request->status
+                ]);
+            }else{
+                $request->validate([
+                    'name' => 'required',
+                    'email' => 'required|email',
+                    'mobile_number' => 'required|min:10|max:14',
+                    'address' => 'required',
+                    'gender' => 'nullable|in:F,M,O',
+                    'aadhar_number'=> 'required|min:10|max:14',
+                    'pancard_number'=> 'required|min:10|max:14',
+                    'alternate_moble_numbe'=> 'nullable|min:10|max:14',
+                    'dob'=> 'nullable|date_format:Y-m-d',
+                ]);
+
+                $customer = User::findOrFail($id);
+                $customer->update($request->all());
+            }
+            
             return redirect()->route('customers.index')->with('message', 'Customer updated successfully.');
         } catch (\Throwable $th) {
             //throw $th;

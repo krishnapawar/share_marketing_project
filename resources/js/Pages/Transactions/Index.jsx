@@ -10,6 +10,15 @@ import Select from "react-select";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
 
+import Modal from "@/Components/Modal/Modal";
+import ModalBody from "@/Components/Modal/ModalBody";
+import ModalTitle from "@/Components/Modal/ModalTitle";
+import { Transition } from "@headlessui/react";
+import ModalFooter from "@/Components/Modal/ModalFooter";
+import SecondaryButton from "@/Components/SecondaryButton";
+import Swal from "sweetalert2";
+import { FaDollarSign } from "react-icons/fa";
+
 const Transaction = ({ auth }) => {
     const { transactions, users, user_id } = usePage().props;
     const [filterValue, setFilterValue] = useState("");
@@ -17,7 +26,7 @@ const Transaction = ({ auth }) => {
     const [shouldFetch, setShouldFetch] = useState(false);
     const [userOptions, setUserOptions] = useState([]);
     const confirm = useConfirm();
-    const { delete: destroy, get, post, reset, errors, setData } = useForm();
+    const { delete: destroy, get, post, reset, errors, data, setData, processing,recentlySuccessful } = useForm();
 
     // Prepare user options for select input
     useEffect(() => {
@@ -67,34 +76,50 @@ const Transaction = ({ auth }) => {
         }
     }, [shouldFetch, filterValue, userId, get, reset]);
 
-    const handleDelete = async (id) => {
-        const isConfirmed = await confirm(
-            "Are you sure you want to delete this Transaction?"
-        );
-        if (isConfirmed) {
-            destroy(route("transactions.destroy", id), {
-                preserveScroll: true,
-            });
-        }
-    };
+    // const handleDelete = async (id) => {
+    //     const isConfirmed = await confirm(
+    //         "Are you sure you want to delete this Transaction?"
+    //     );
+    //     if (isConfirmed) {
+    //         destroy(route("transactions.destroy", id), {
+    //             preserveScroll: true,
+    //         });
+    //     }
+    // };
 
-    const handleSubmit = async (e, id, setData) => {
-        e.preventDefault();
-        let status = e.target.value;
-        setData("status", status);
+
+    const [statusModelData, setStatusModelData] = useState({
+        status: "",
+        remark: "",
+    });
+    const [showModal, setShowModal] = useState(false);
+
+    const openStatusModal = (transaction) => {
+        setStatusModelData(transaction);
+        setData("status", transaction.status);
+        setShowModal(true);
+    };
+    const statusModalClose = () => {
+        setShowModal(false);
+    };
+    const handleSubmit = async (transaction) => {
         const isConfirmed = await confirm(
-            `Are you sure you want to change the transaction status to "${status}"? This action is irreversible.`
+            `Are you sure you want to ${data.status} the transaction (Customer:- ${transaction.user.name})? This action
+            is irreversible.`
         );
         if (isConfirmed) {
-            post(route("transactions.updateStatus", { id, status: status }), {
+            post(route("transactions.updateStatus", { id:transaction.id, status:data.status }), {
                 preserveScroll: true,
                 onError: (errors) => {
                     reset();
+                    Swal.fire("Error", "Error updating transaction", "error");
+
                     console.log("errors", errors);
                 },
                 onSuccess: (result) => {
-                    console.log("result", result);
-                    // toast.success('Transaction status updated successfully.');
+                    setShowModal(false);
+                    reset();
+                    Swal.fire("Success", result.success, "success");
                 },
             });
         }
@@ -139,23 +164,20 @@ const Transaction = ({ auth }) => {
             key: 'status',
             label: 'Status',
             render: (transaction) => (
-                <div style={{ width: "127px" }}>
-                    <InputLabel htmlFor="status" value="Status" />
-                    <SelectInput
-                        id="status"
-                        value={transaction.status}
-                        onChange={(e) => handleSubmit(e, transaction.id, setData)}
-                        options={[
-                            { value: "", label: "Select Status" },
-                            { value: "cancelled", label: "Cancelled" },
-                            { value: "approve", label: "Approved" },
-                            { value: "pending", label: "Pending" },
-                        ]}
-                        className={`${transaction.status}  mt-1 block w-full `}
-                        readOnly={transaction.status=='approve' ? true:false}
-                    />
-                    <InputError message={errors.status} className="mt-2" />
-                </div>
+                <Link
+                        onClick={(e) => {
+                            e.preventDefault();
+                            transaction.status != "approved" &&
+                                openStatusModal(transaction);
+                        }}
+                        className={`${
+                            "bg-" + transaction.status
+                        } badge  mt-1 block w-full width-100`}
+
+                        data-toggle="tooltip" data-placement="top" title="Update Transaction Status"
+                    >
+                        {transaction.status}
+                    </Link>
             ),
         },
         { key: 'type', label: 'Type', render: (transaction) => <span  className={transaction.type}>{transaction.type}</span> },
@@ -172,6 +194,7 @@ const Transaction = ({ auth }) => {
                     Transactions
                 </h2>
             }
+            headTitle="Transactions"
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -219,6 +242,72 @@ const Transaction = ({ auth }) => {
                     </div>
                 </div>
             </div>
+
+            <Modal
+                maxWidth="sm"
+                show={showModal}
+                onClose={statusModalClose}
+            >
+                <ModalBody icon={<FaDollarSign />}>
+                    <ModalTitle title="Update Transaction Status" />
+                    <div className="p-6 text-gray-900 dark:text-gray-100">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSubmit(statusModelData);
+                            }}
+                        >
+                            <div>
+                                <InputLabel htmlFor="status" value="Status" />
+                                <SelectInput
+                                    id="status"
+                                    value={data.status || ''}
+                                    onChange={(e) => setData('status', e.target.value)}
+                                    options={[
+                                        { value: '', label: 'Select Status' },
+                                        { value: 'cancelled', label: 'Cancelled' },
+                                        { value: 'approved', label: 'Approved' },
+                                        { value: 'pending', label: 'Pending' },
+                                    ]}
+                                    className={data.status+" mt-1 block w-full"}
+                                />
+                                <InputError message={errors.status} className="mt-2" />
+                            </div>
+                            <ModalFooter>
+                                <div className="flex items-center gap-4 mt-4">
+                                    <SecondaryButton
+                                        type="button"
+                                        disabled={processing}
+                                        onClick={statusModalClose}
+                                    >
+                                        Close
+                                    </SecondaryButton>
+                                </div>
+                                <div className="flex items-center gap-4 mt-4">
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={processing}
+                                    >
+                                        Save
+                                    </PrimaryButton>
+
+                                    <Transition
+                                        show={recentlySuccessful}
+                                        enter="transition ease-in-out"
+                                        enterFrom="opacity-0"
+                                        leave="transition ease-in-out"
+                                        leaveTo="opacity-0"
+                                    >
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            Saved.
+                                        </p>
+                                    </Transition>
+                                </div>
+                            </ModalFooter>
+                        </form>
+                    </div>
+                </ModalBody>
+            </Modal>
         </AuthenticatedLayout>
     );
 };

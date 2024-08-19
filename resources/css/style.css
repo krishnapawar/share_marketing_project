@@ -393,16 +393,33 @@ button:active {
 
   /* status class */
 
-  /* styles.css */
-.buy,.profit,.approve,.approved, .completed, .addFund {
+  /* background  */
+.bg-buy,.bg-profit,.bg-approve,.bg-approved, .bg-actived, .bg-completed, .bg-addFund {
+  background: green;
+}
+
+.bg-sell{
+  background: rgb(6, 156, 176);
+}
+
+.bg-loss,.bg-cancelled, .bg-disapprove,.bg-disapproved,.bg-deactived {
+  background: red;
+}
+
+.bg-withdrawal,.bg-running, .bg-pending {
+  background: orange;
+}
+
+/* text */
+.buy,.bg-profit,.profit,.approve,.approved, .actived .completed, .addFund {
   color: green;
 }
 
 .sell{
-  color: rgb(6, 156, 176);
+  color: rgb(6, 4, 137);
 }
 
-.loss,.cancelled, .disapprove {
+.loss,.bg-loss,.cancelled, .deactived, .disapprove,.disapproved {
   color: red;
 }
 
@@ -424,4 +441,21 @@ padding: 0px;
 }
 .css-hlgwow{
   width: 150px;
+}
+.badge {
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  /* width: 60%; */
+  text-align: center;
+}
+.badge:active {
+  transform: scale(0.95) !important; /* Scale down when clicked */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important; /* Add box shadow when clicked */
+  /* Add more styles or effects as needed */
+}
+.swal2-cancel,.swal2-deny{
+  display: none !important;
 }

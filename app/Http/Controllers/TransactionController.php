@@ -91,12 +91,12 @@ class TransactionController extends Controller
             $id = $request->input('id');
             $status = $request->input('status');
             $transaction=Transaction::where('id', $request->id)->first();
-            if($transaction->status =="approve"){
+            if($transaction->status =="approved"){
                 return redirect()->route('transactions.index')->with(['success' => 'Transaction status already updated successfully']);
             }
             if($transaction){
                 $wallet = Wallet::where('user_id',$transaction->user_id)->first();
-                if($status == "approve" && $transaction->status !="approve" && $transaction->type =="addFund"){
+                if($status == "approved" && $transaction->status !="approved" && $transaction->type =="addFund"){
                     $wallet->balance += $transaction->amount;
                     $wallet->save();
                 }

@@ -3,11 +3,11 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Sidebar from '@/Components/Sidebar';
 import { FaBars } from 'react-icons/fa';
 
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({ user, header, children, headTitle=false }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -133,6 +133,10 @@ export default function Authenticated({ user, header, children }) {
                     <header className="bg-white dark:bg-gray-800 shadow">
                         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
                     </header>
+                )}
+
+                {headTitle && (
+                    <Head title={headTitle || ''} />
                 )}
 
                 <main>

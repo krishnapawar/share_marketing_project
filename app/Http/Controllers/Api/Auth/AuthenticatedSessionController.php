@@ -31,6 +31,15 @@ class AuthenticatedSessionController extends Controller
         }
 
         $user = Auth::user();
+        if($user->role != 1 && $user->status !='actived' ) 
+        {
+            if(auth()->user()->status == 'cancelled'){
+                return response()->json(['message' => 'Your account has been Dispproved by Admin'], 403);
+            }
+            if(auth()->user()->status == 'pending'){
+                return response()->json(['message' => 'Your account is pending for approval by Admin'],403);
+            }
+        }
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return $this->sendResponse([

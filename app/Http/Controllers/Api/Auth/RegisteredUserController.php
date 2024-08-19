@@ -27,14 +27,14 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'mobile_number' => 'required|string|min:10|max:15',
+            'mobile_number' => 'required|string|min:10',
             'dob' => 'required|string|date_format:Y-m-d|max:55',
             'gender' => 'required|string|in:F,M,O|max:6',
-            'aadhar_number' => 'required|string|min:10|max:15',
-            'pancard_number' => 'required|string|min:10|max:15',
-            'alternate_moble_number' => 'nullable|string|min:10|max:15',
+            'aadhar_number' => 'required|string|min:10',
+            'pancard_number' => 'required|string|min:10',
+            'alternate_moble_number' => 'nullable|string|min:10',
             'address' => 'required|string|min:4|max:255',
-            'pin_code'=>'required|numeric|min:4|max:8',
+            'pin_code'=>'required|numeric|min:4',
         ]);
 
         $user = User::create([

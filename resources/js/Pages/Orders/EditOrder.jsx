@@ -36,7 +36,7 @@ const EditCustomer = ({ auth }) => {
     };
 
     const userOptions=users.map((item)=>{
-        return {value:item.id,label:item.name}
+        return {value:item.id,label:item.customer_id+" - "+item.name}
     })
 
     useEffect(()=>{

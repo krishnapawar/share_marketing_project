@@ -31,19 +31,19 @@ Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke
 Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->middleware(['throttle:6,1']);
 Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])->middleware('auth')->name('verification.notice');
 Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']);
-
+Route::post('/updateProfile', [UserController::class, 'updateProfile'])->middleware('auth:sanctum');
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','role:0'])->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
     Route::apiResource('/user', UserController::class)->only(['destroy', 'index', 'update']);
+    Route::post('/addCustomerBankDetail', [UserController::class,'addCustomerBankDetail']);
     Route::get('/dashboard', [DashboardController::class,'index']);
-    Route::apiResource('/order', LoanRequestController::class);
+    Route::apiResource('/order', OrderController::class);
     Route::apiResource('/transaction', TransactionController::class)->only(['index', 'show']);
     Route::post('/add-fund', [TransactionController::class, 'store']);
     Route::post('/withdrawal', [TransactionController::class, 'withdrawal']);
     Route::get('/helpAndSuport', [DashboardController::class,'helpAndSuport']);
-    Route::post('/updateProfile', [UserController::class, 'updateProfile']);
     Route::apiResource('/loanRequest', LoanRequestController::class);
     Route::put('/restUserPassword', [PasswordController::class, 'update']);
 });
