@@ -19,7 +19,7 @@ const EditCustomer = ({ auth }) => {
         date: '',
         currency:'',
         price: 0,
-        type: '',
+        type: 'buy',
         qty: 1,
     });
 
@@ -99,7 +99,6 @@ const EditCustomer = ({ auth }) => {
                                             id="type"
                                             value={data.type}
                                             selected={data.type}
-                                            onChange={(e) => setData("type", e.target.value)}
                                             options={[
                                                 // { value: '', label: 'Select type' },
                                                 { value: 'buy', label: 'Buy' },
@@ -157,7 +156,7 @@ const EditCustomer = ({ auth }) => {
                                 </div>                 
 
                                 <div className="flex items-center gap-4 mt-4">
-                                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                                    <PrimaryButton disabled={processing}>Buy</PrimaryButton>
 
                                     <Transition
                                         show={recentlySuccessful}

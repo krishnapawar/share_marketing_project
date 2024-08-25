@@ -102,9 +102,9 @@ const EditCustomer = ({ auth }) => {
                                             selected={data.type}
                                             onChange={(e) => setData("type", e.target.value)}
                                             options={[
-                                                { value: '', label: 'Select type' },
+                                                // { value: '', label: 'Select type' },
                                                 { value: 'buy', label: 'Buy' },
-                                                { value: 'sell', label: 'Sell' },
+                                                // { value: 'sell', label: 'Sell' },
                                             ]}
                                             className={data.type+" mt-1 block w-full"}
                                         />

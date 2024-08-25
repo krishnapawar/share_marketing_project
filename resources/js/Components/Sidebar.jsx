@@ -3,21 +3,21 @@ import { FaTimes } from 'react-icons/fa';
 import { Link, usePage } from '@inertiajs/react';
 
 // Helper function to get the class names for the active link
-const getLinkClassName = (routeName) => {
+const getLinkClassName = (routeUrl) => {
     const baseClass = "block py-2.5 px-4 transition duration-200 hover:bg-gray-700 hover:text-white";
-    return route().current(routeName) ? `${baseClass} active` : baseClass;
+    return route().current(routeUrl+'*') ? `${baseClass} active` : baseClass;
 };
 
 // Navigation links
 const navLinks = [
-    { name: 'Dashboard', routeName: 'dashboard' },
-    { name: 'Profile', routeName: 'profile.edit' },
-    { name: 'Customers', routeName: 'customers.index' },
-    { name: 'Orders', routeName: 'orders.index' },
-    { name: 'Loan Request', routeName: 'loanRequest.index' },
-    { name: 'Transactions', routeName: 'transactions.index' },
-    { name: 'Settings', routeName: 'settings.index' },
-    { name: 'Logout', routeName: 'logout', method: 'post' }
+    { name: 'Dashboard', routeName: 'dashboard', url:'dashboard'},
+    { name: 'Profile', routeName: 'profile.edit', url:'profile' },
+    { name: 'Customers', routeName: 'customers.index', url:'customers' },
+    { name: 'Orders', routeName: 'orders.index', url:'orders' },
+    { name: 'Loan Request', routeName: 'loanRequest.index', url:'loanRequest' },
+    { name: 'Transactions', routeName: 'transactions.index', url:'transactions' },
+    { name: 'Settings', routeName: 'settings.index', url:'settings' },
+    { name: 'Logout', routeName: 'logout', url:'logout',  method: 'post' }
 ];
 
 const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
@@ -32,12 +32,12 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
                 </button>
             </div>
             <nav className="mt-5">
-                {navLinks.map(({ name, routeName, method }) => (
+                {navLinks.map(({ name, routeName, url, method }) => (
                     <Link
                         key={routeName}
                         href={route(routeName)}
                         method={method}
-                        className={getLinkClassName(routeName)}
+                        className={getLinkClassName(url)}
                     >
                         {name}
                     </Link>

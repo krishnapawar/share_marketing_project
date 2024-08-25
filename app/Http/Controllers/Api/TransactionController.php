@@ -115,7 +115,7 @@ class TransactionController extends Controller
                     $transaction->wallet_id = $wallet->id;
                     $transaction->type = 'withdrawal';
                     $transaction->amount = $request->amount;
-                    $transaction->status = 'approve';
+                    $transaction->status = 'approved';
                     $transaction->remaininng_amount = $wallet->balance;
                     $transaction->save();
                     $transaction->message ="Amount withdrawn successfully.";

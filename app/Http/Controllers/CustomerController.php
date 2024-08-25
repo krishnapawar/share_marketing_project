@@ -18,6 +18,7 @@ class CustomerController extends Controller
             ->orWhere('email','like','%'.$request->search.'%')
             ->orWhere('customer_id','like','%'.$request->search.'%');
         })
+        ->with('file')
         ->latest('id')->paginate(10); // Adjust the pagination count as needed
         return Inertia::render('Customers/CustomerList', [
             'customers' => $customers,
@@ -68,7 +69,7 @@ class CustomerController extends Controller
         
         try {
             if( $request->has('status') && $request->status !=""){
-                User::where('id', $request->id)
+                User::where('id', $id)
                 ->update([
                     'status' => $request->status
                 ]);

@@ -12,7 +12,7 @@
 
 
 /* Responsive Design for Small Screens */
-/* @media screen and (max-width: 767px) {
+@media screen and (max-width: 767px) {
     .responsive-table {
         overflow-x: auto;
         white-space: nowrap; 
@@ -44,8 +44,8 @@
         content: attr(data-label);
         position: absolute;
         left: 0;
-        width: 40%;
-        height: 40px;
+        width: 40% !important;
+        height: 40px !important;
         padding-right: 10px;
         white-space: nowrap;
         font-weight: bold;
@@ -54,7 +54,7 @@
         margin-left: 10px;
         border-right: 1px solid #aaaaaa;
     }
-} */
+}
 
 
 

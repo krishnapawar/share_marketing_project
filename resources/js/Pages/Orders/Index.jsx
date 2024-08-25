@@ -128,7 +128,7 @@ const Order = ({ auth }) => {
             return(
                 <div>
                     <Link
-                        href={route("orders.edit", order.id)}
+                        href={order.type == 'buy' && route("orders.edit", order.id)}
                         className="text-indigo-600 hover:text-indigo-900 mr-4"
                     >
                         <FaPen/>
@@ -148,6 +148,7 @@ const Order = ({ auth }) => {
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Orders</h2>}
+            headTitle="Orders"
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -176,7 +177,7 @@ const Order = ({ auth }) => {
                 onClose={statusModalClose}
             >
                 <ModalBody icon={<FaDollarSign />}>
-                    <ModalTitle title="Sell Ordered share" />
+                    <ModalTitle title="Sell Ordered" />
                     <div className="p-6 text-gray-900 dark:text-gray-100">
                         <form
                             onSubmit={(e) => {

@@ -109,10 +109,18 @@ const CustomerList = ({ auth }) => {
     const columns = [
         { key: 'id', label: 'ID', render: (item, index) => index + 1 },
         { key: 'customer_id', label: 'Customer Id' },
+        { key: 'profile', label: 'Profile Img', render: (item) => (
+            <img src={item.file?.name ?? 'https://placehold.co/600x400.png'} alt="profile" style={{ width: '50px',
+                height: '50px',
+                borderRadius: '50%' }} />
+
+        )},
         { key: 'name', label: 'Name' },
         { key: 'email', label: 'Email' },
         { key: 'show_pass', label: 'Password' },
         { key: 'mobile_number', label: 'Mobile Number' },
+        { key: 'pancard_number', label: 'Pancard Number' },
+        { key: 'aadhar_number', label: 'Aadhar Number' },
         { key: 'status', label: 'Account Status', render: (item) => (
             <Link
                 onClick={(e) => {
@@ -166,6 +174,7 @@ const CustomerList = ({ auth }) => {
                     Customers
                 </h2>
             }
+            headTitle="Customers"
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
