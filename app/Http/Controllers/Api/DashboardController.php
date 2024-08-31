@@ -22,7 +22,8 @@ class DashboardController extends Controller
             //code...
             $user = auth()->user();
 	        $wallets = Wallet::where(['user_id' =>$user->id])->first();
-            $settings = Setting::with('file')->whereIn('key',['qrCode','bankDatail'])->get();
+            $settings = Setting::with('file')->whereIn('key',['qrCode','bankDatail','upi_id'])->get();
+            
             if(empty($wallets)){
                 Wallet::create(['user_id' =>$user->id]);
             }
@@ -30,6 +31,7 @@ class DashboardController extends Controller
                 'wallet',
                 'loanRequests',
            ]);
+
 
             $total_balance = $user->wallet->balance;
             $profit = $user->wallet->profit;

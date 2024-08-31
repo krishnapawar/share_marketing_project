@@ -10,7 +10,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        $settings = Setting::whereIn('key',['qrCode','bankDatail'])->get();
+        $settings = Setting::whereIn('key',['qrCode','bankDatail','upi_id'])->get();
         return Inertia::render('Settings/Index', [
             'settings' => $settings->load('file')
         ]);

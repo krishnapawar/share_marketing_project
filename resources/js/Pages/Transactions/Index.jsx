@@ -18,12 +18,14 @@ import ModalFooter from "@/Components/Modal/ModalFooter";
 import SecondaryButton from "@/Components/SecondaryButton";
 import Swal from "sweetalert2";
 import { FaDollarSign } from "react-icons/fa";
-
+import NewModel from "@/Components/Modal";
 const Transaction = ({ auth }) => {
     const { transactions, users, user_id } = usePage().props;
     const [filterValue, setFilterValue] = useState("");
     const [userId, setUserId] = useState(user_id);
     const [shouldFetch, setShouldFetch] = useState(false);
+    const [transactionFile, setTransactionFile] = useState("");
+    const [transactionFileModel, setTransactionFileModel] = useState(false);
     const [userOptions, setUserOptions] = useState([]);
     const confirm = useConfirm();
     const { delete: destroy, get, post, reset, errors, data, setData, processing,recentlySuccessful } = useForm();
@@ -140,6 +142,11 @@ const Transaction = ({ auth }) => {
         setUserId("");
         setShouldFetch(true);
     };
+    const transactionFileModelToggle = (file)=>{
+        console.log("ooo");
+        setTransactionFileModel(!transactionFileModel);
+        setTransactionFile(file)
+    }
 
     const columns = [
         { key: 'id', label: 'ID' },
@@ -152,10 +159,12 @@ const Transaction = ({ auth }) => {
             label: 'ScreenShot',
             render: (transaction) =>
                 transaction.type === "addFund" ? (
-                    <img
-                        src={transaction.file ? transaction.file.name : "-"}
-                        alt="Screenshot"
-                    />
+                    <span onClick={()=>transactionFileModelToggle(transaction.file.name)}>
+                        <img
+                            src={transaction.file ? transaction.file.name : "-"}
+                            alt="Screenshot"
+                        />
+                    </span>
                 ) : (
                     "-"
                 ),
@@ -248,7 +257,7 @@ const Transaction = ({ auth }) => {
                 show={showModal}
                 onClose={statusModalClose}
             >
-                <ModalBody icon={<FaDollarSign />}>
+                <ModalBody icon=''>
                     <ModalTitle title="Update Transaction Status" />
                     <div className="p-6 text-gray-900 dark:text-gray-100">
                         <form
@@ -308,6 +317,17 @@ const Transaction = ({ auth }) => {
                     </div>
                 </ModalBody>
             </Modal>
+
+            <NewModel
+                maxWidth="xl"
+                show={transactionFileModel}
+                onClose={transactionFileModelToggle}
+            >
+                <img
+                        src={transactionFile ?? "-"}
+                        alt="Screenshot"
+                    />
+            </NewModel>
         </AuthenticatedLayout>
     );
 };
