@@ -192,7 +192,7 @@ const Transaction = ({ auth }) => {
         { key: 'type', label: 'Type', render: (transaction) => <span  className={transaction.type}>{transaction.type}</span> },
         { key: 'description', label: 'Remarks' },
         { key: 'amount', label: 'Amount', render: (transaction) => `${transaction.amount ?? "0"} INR` },
-        { key: 'remaining_amount', label: 'Balance', render: (transaction) => `${transaction.remaining_amount ?? "0"} INR` },
+        { key: 'remaininng_amount', label: 'Balance', render: (transaction) => `${transaction.remaininng_amount ?? "0"} INR` },
     ];
 
     return (

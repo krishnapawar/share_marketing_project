@@ -66,17 +66,28 @@ class OrderController extends Controller
         ]);
         try {
             //code...
-            $order = new Order;
             $amount = $request->qty * $request->price;
+            $wallet = Wallet::where('user_id',$request->user_id)->first();
+            $balance = $wallet->balance ?? 0;
+            if($balance < $request->amount){
+                return redirect()->back()->with('error', 'Insufficient balance');
+            }
+                
+
+            $order = new Order;
+            
             $order->user_id = $request->user_id;
             $order->status = "running";
             $order->date = $request->date;
             $order->currency = strtoupper($request->currency);
             $order->price = $request->price;
-            $order->amount = round($amount,2,0);
+            $order->amount = round($request->amount,2,0);
             $order->type = $request->type;
             $order->qty = $request->qty;
             $order->save();
+
+            $wallet->balance -= $request->amount;
+            $wallet->save();
             return redirect()->route('orders.index')->with('success', 'Order created successfully');
         } catch (\Throwable $th) {
             //throw $th;

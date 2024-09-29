@@ -459,3 +459,11 @@ padding: 0px;
 .swal2-cancel,.swal2-deny{
   display: none !important;
 }
+
+/* Style the first item in the dropdown */
+.css-1nmdiq5-menu :first-child {
+  background-color: rgb(101, 100, 100);
+  color: white; /* Optional: Change text color */
+}
+
+/*  */

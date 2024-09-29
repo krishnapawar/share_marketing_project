@@ -110,9 +110,11 @@ const CustomerList = ({ auth }) => {
         { key: 'id', label: 'ID', render: (item, index) => index + 1 },
         { key: 'customer_id', label: 'Customer Id' },
         { key: 'profile', label: 'Profile Img', render: (item) => (
-            <img src={item.file?.name ?? 'https://placehold.co/600x400.png'} alt="profile" style={{ width: '50px',
-                height: '50px',
+            <span>
+                <img src={item.file?.name ?? 'https://placehold.co/600x400.png'} alt="profile" style={{ width: '50px',
+                height: '50px !important',
                 borderRadius: '50%' }} />
+            </span>
 
         )},
         { key: 'name', label: 'Name' },

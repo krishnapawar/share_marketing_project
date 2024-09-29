@@ -100,7 +100,12 @@ class TransactionController extends Controller
                     $wallet->balance += $transaction->amount;
                     $wallet->save();
                 }
+                if($status == "approved" && $transaction->status !="approved" && $transaction->type =="withdrawal"){
+                    $wallet->balance -= $transaction->amount;
+                    $wallet->save();
+                }
                 $transaction->status=$status;
+                $transaction->remaininng_amount = $wallet->balance;
                 $transaction->save();
             }
        }

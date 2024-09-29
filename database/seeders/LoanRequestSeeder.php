@@ -13,14 +13,14 @@ class LoanRequestSeeder extends Seeder
             [
                 'user_id' => 1,
                 'amount' => 5000.00,
-                'status' => 'pending',
+                // 'status' => 'pending',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'user_id' => 2,
                 'amount' => 3000.00,
-                'status' => 'approved',
+                // 'status' => 'approved',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

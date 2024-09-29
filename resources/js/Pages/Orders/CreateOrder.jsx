@@ -41,7 +41,11 @@ const EditCustomer = ({ auth }) => {
     useEffect(()=>{
         let totalAmount = data.qty * data.price;
         SetAmount(totalAmount);
-    },[data]);
+    },[data.qty,data.price]);
+
+    useEffect(()=>{
+        setData("amount",amount);
+    },[amount]);
 
     return (
         <AuthenticatedLayout
@@ -147,8 +151,8 @@ const EditCustomer = ({ auth }) => {
                                     <InputLabel htmlFor="amount" value="Amount" />
                                     <TextInput
                                         id="amount"
-                                        value={amount}
-                                        onChange={(e) => setData("amount", e.target.value)}
+                                        value={data.amount ?? 0}
+                                        onChange={(e) => SetAmount(e.target.value)}
                                         type="text"
                                         className="mt-1 block w-full"
                                     />

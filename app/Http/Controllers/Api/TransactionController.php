@@ -107,18 +107,18 @@ class TransactionController extends Controller
             $wallet = Wallet::where('user_id', $request->user()->id)->first();
             if($wallet){
                 if($wallet->balance >= $request->amount){
-                    $wallet->balance -= $request->amount;
-                    $wallet->withdrawal += $request->amount;
-                    $wallet->save();
+                    // $wallet->balance -= $request->amount;
+                    // $wallet->withdrawal += $request->amount;
+                    // $wallet->save();
                     $transaction = new Transaction();
                     $transaction->user_id = $request->user()->id;
                     $transaction->wallet_id = $wallet->id;
                     $transaction->type = 'withdrawal';
                     $transaction->amount = $request->amount;
-                    $transaction->status = 'approved';
+                    $transaction->status = 'pending';
                     $transaction->remaininng_amount = $wallet->balance;
                     $transaction->save();
-                    $transaction->message ="Amount withdrawn successfully.";
+                    $transaction->message ="Amount withdrawn request successfully.";
                     return $this->sendResponse($transaction);
                 }else{
                     return $this->sendError([
