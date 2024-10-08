@@ -4,7 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import Table from "@/Components/Table";
 import useConfirm from "@/Components/ConfirmDialog";
-import { FaLock, FaPen, FaTrash, FaQuestionCircle } from "react-icons/fa";
+import { FaLock, FaPen, FaTrash, FaQuestionCircle, FaEye } from "react-icons/fa";
 import Modal from "@/Components/Modal/Modal";
 import ModalBody from "@/Components/Modal/ModalBody";
 import ModalTitle from "@/Components/Modal/ModalTitle";
@@ -110,11 +110,11 @@ const CustomerList = ({ auth }) => {
         { key: 'id', label: 'ID', render: (item, index) => index + 1 },
         { key: 'customer_id', label: 'Customer Id' },
         { key: 'profile', label: 'Profile Img', render: (item) => (
-            <span>
-                <img src={item.file?.name ?? 'https://placehold.co/600x400.png'} alt="profile" style={{ width: '50px',
-                height: '50px !important',
-                borderRadius: '50%' }} />
-            </span>
+                <span>
+                    <img src={item.file?.name ?? 'https://placehold.co/600x400.png'} alt="profile" style={{ width: '50px',
+                    height: '50px !important',
+                    borderRadius: '50%' }} />
+                </span>
 
         )},
         { key: 'name', label: 'Name' },
@@ -158,11 +158,19 @@ const CustomerList = ({ auth }) => {
                     </Link>
                     <button
                         onClick={() => openChangePasswordModal(item)}
-                        className="text-indigo-600 hover:text-indigo-900 text-yellow-300 ml-2"
+                        className="text-indigo-600 hover:text-indigo-900 text-yellow-300"
                         data-toggle="tooltip" data-placement="top" title="Change Password"
                     >
                         <FaLock />
                     </button>
+                    <Link
+                        href={route("customers.show", item.id)}
+                        className="text-indigo-600 hover:text-indigo-900 mt-2 mr-4"
+                        data-toggle="tooltip" data-placement="top" title="View Customer"
+                    >
+                        <FaEye />
+                    </Link>
+                    
                 </div>
             )
         }

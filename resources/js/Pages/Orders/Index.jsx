@@ -187,12 +187,12 @@ const Order = ({ auth }) => {
                         >
                             <div>
                                 <InputLabel htmlFor="buy_amount" className="mb-2" value="Buying Amount" />
-                                <TextInput type="number" value={statusModelData.amount || ''}  placeholer="Enter selling amount" min='0' readOnly/>
+                                <TextInput type="text" value={statusModelData.amount || ''}  placeholer="Enter selling amount" min='0' readOnly/>
                                 <InputError message={errors.status} className="mt-2" />
                             </div>
                             <div>
                                 <InputLabel htmlFor="selling_amount" className="mb-2" value="Selling Amount" />
-                                <TextInput type="number" value={data.selling_amount || ''} onChange={(e)=>setData('selling_amount',e.target.value)}  placeholer="Enter selling amount" min='0'/>
+                                <TextInput type="text" value={data.selling_amount || ''} onChange={(e)=>setData('selling_amount',e.target.value)}  placeholer="Enter selling amount" min='0'/>
                                 <InputError message={errors.status} className="mt-2" />
                             </div>
                             <ModalFooter>

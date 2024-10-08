@@ -129,7 +129,7 @@ const EditCustomer = ({ auth }) => {
                                         id="price"
                                         value={data.price}
                                         onChange={(e) => setData("price", e.target.value)}
-                                        type="number"
+                                        type="text"
                                         className="mt-1 block w-full"
                                         min="0"
                                     />
@@ -141,9 +141,9 @@ const EditCustomer = ({ auth }) => {
                                         id="qty"
                                         value={data.qty}
                                         onChange={(e) => setData("qty", e.target.value)}
-                                        type="number"
+                                        type="text"
                                         className="mt-1 block w-full"
-                                        min="1"
+                                        min="0"
                                     />
                                     <InputError message={errors.qty} className="mt-2" />
                                 </div>

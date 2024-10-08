@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\{User,Wallet,Order};
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
@@ -26,6 +26,30 @@ class CustomerController extends Controller
     }
     public function create(){
         return Inertia::render('Customers/CreateCustomer');
+    }
+
+    public function show($id)
+    {
+        $customer = User::with('file')->findOrFail($id);
+
+        $wallets = Wallet::firstOrNew(['user_id' =>$id]);
+        
+ 
+            $total_balance =  $wallets->balance ?? 0;
+            $profit =  $wallets->profit ?? 0;
+            $loss =  $wallets->loss ?? 0;
+            $withdra =  $wallets->withdrawal ?? 0;
+            $loan =  $wallets->loan ?? 0;
+            $customer->wallet = [
+                'total_balance' => $total_balance,
+                'profit' => Order::where(['profit_loss_status'=>'profit','user_id'=>$id])->sum('profit_loss_amount'),
+                'loss' => Order::where(['profit_loss_status'=>'loss','user_id'=>$id])->sum('profit_loss_amount'),
+                'withdrawal' => $withdra,
+                'loan' => $loan
+            ];
+        return Inertia::render('Customers/ShowCustomer', [
+            'customer' => $customer,
+        ]);
     }
 
     public function edit($id)
@@ -120,6 +144,38 @@ class CustomerController extends Controller
         ]);
 
         return redirect()->route('customers.index')->with('message', 'Password updated successfully.');
+    }
+
+    public function updateWallet(Request $request)
+    {
+        
+        try {
+            $request->validate([
+                'balance' => 'required',
+                'loan' => 'required',
+                'id' => 'required'
+            ]);
+
+            $id = $request->id;
+
+            $wallet = Wallet::firstOrNew(['user_id' =>$id]);
+            
+
+            if($request->has('balance')){
+                $wallet->balance = $request->balance;
+            }
+            if($request->has('loan')){
+                $wallet->loan = $request->loan;
+            }
+            $wallet->save();
+            
+            return redirect()->route('customers.show',$id)->with('message', 'Wallet updated successfully.');
+        } catch (\Throwable $th) {
+            dd($th);
+            throw $th;
+            return redirect()->back()->withError('message', 'Failed to update Wallet.');
+        }
+        
     }
 
 }

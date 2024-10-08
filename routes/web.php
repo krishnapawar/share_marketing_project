@@ -53,6 +53,7 @@ Route::middleware(['auth','role:1'])->group(function () {
     Route::resource('settings', SettingController::class);
     Route::resource('/customers', CustomerController::class);
     Route::post('/changePassword/{id}', [CustomerController::class,'changePassword'])->name('changePassword');
+    Route::post('/updateWallet', [CustomerController::class,'updateWallet'])->name('updateWallet');
     Route::resource('/orders', OrderController::class);
     Route::post('/orders/orderSell', [OrderController::class,'orderSell'])->name('orderSell');
     Route::resource('/transactions', TransactionController::class);

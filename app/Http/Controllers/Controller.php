@@ -42,6 +42,10 @@ abstract class Controller
 
     public function uploadFile($file,$dastination='',$id=null){
         try {
+            // Check if the file is valid
+            if (!$file || !$file->isValid()) {
+                return $id;
+            }
             $fileName = time().'.'.$file->getClientOriginalExtension();
             $originalName = $file->getClientOriginalName();
             $path = $file->store('public/'.$dastination);

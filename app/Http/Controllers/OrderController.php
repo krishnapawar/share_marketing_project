@@ -60,7 +60,7 @@ class OrderController extends Controller
             // 'status' => 'required',
             'date' => 'required|date_format:Y-m-d',
             'currency' => 'required',
-            'price' => 'required|numeric|min:1',
+            'price' => 'required',
             'type' => 'required|in:sell,buy',
             'qty' => 'required|numeric|min:1',
         ]);
@@ -115,11 +115,11 @@ class OrderController extends Controller
     {
         //
         $request->validate([
-            'user_id' => 'required|integer|min:1',
+            'user_id' => 'required|min:1',
             // 'status' => 'required|string',
             'date' => 'required|date|date_format:Y-m-d',
             'currency' => 'required|string',
-            'price' => 'required|numeric|min:1',
+            'price' => 'required',
             // 'amount' => 'required|numeric',
             'type' => 'required|string',
             'qty' => 'required|numeric|min:1',

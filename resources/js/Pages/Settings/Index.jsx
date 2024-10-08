@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePage, Head, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import InputLabel from "@/Components/InputLabel";
@@ -10,6 +10,23 @@ import PrimaryButton from '@/Components/PrimaryButton';
 const Settings = ({ auth }) => {
     const { settings = [], flash = {} } = usePage().props;
     const [localSettings, setLocalSettings] = useState(settings);
+
+    const setBank = (setting) => {
+        console.log(setting)
+        const sett = setting ? JSON.parse(setting) :{ 
+            accountHolderName: "",     
+            accountNumber: "",     
+            bankName: "",     
+            branchName: "",     
+            branchCode: "",     
+            IFSC: "",     
+            SWIFT: "",     
+            accountType: "",     
+            currency: "" 
+        };
+        setBankDetails(sett);
+    };
+    
 
     const handleImageChange = (id, setData,setPreview) => (e) => {
         const file = e.target.files[0];
@@ -74,6 +91,28 @@ const Settings = ({ auth }) => {
                     });
                     let previewd = setting.key === "qrCode" && setting.file!=null ? setting.file.name : null;
                     const [preview, setPreview] = useState({[setting.id]:previewd});
+                    const sett = setting.key === "bankDatail" && setting?.value ? JSON.parse(setting.value) :{ 
+                        accountHolderName: "",     
+                        accountNumber: "",     
+                        bankName: "",     
+                        branchName: "",     
+                        branchCode: "",     
+                        IFSC: "",     
+                        SWIFT: "",     
+                        accountType: "",     
+                        currency: "" 
+                    };
+                    const [bankDetails, setBankDetails] = useState(sett);
+                    
+                    // Use useEffect unconditionally, and check for the condition inside
+                    useEffect(() => {
+                        if (data.key === "bankDatail") {
+                            setData("value", JSON.stringify(bankDetails));
+                        }
+                    }, [bankDetails, data.key, data.key === "bankDatail"]); // Ensure the effect runs when bankDetails or data.key changes
+
+                    
+                    
                     
                     return (
                         <div key={setting.id} className="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4">
@@ -82,21 +121,27 @@ const Settings = ({ auth }) => {
                                     <form onSubmit={handleSubmit(setting.id, data, post, reset)} method="post" encType="multipart/form-data">
                                         <input type="hidden" value={setting.id} />
                                         <div>
-                                            <InputLabel htmlFor={`key-${setting.id}`} value="Key" />
+                                        <h2 className="font-semibold text-xm text-gray-800 dark:text-gray-200 leading-tight mb-2">
+                                            Key:- {data.key ?? '-'}
+                                            <hr></hr>
+                                        </h2>
+                                        
+                                            {/* <InputLabel htmlFor={`key-${setting.id}`} value="Key" /> */}
                                             <TextInput
                                                 id={`key-${setting.id}`}
                                                 value={data.key}
                                                 onChange={(e) => setData("key", e.target.value)}
-                                                type="text"
+                                                type="hidden"
                                                 className="mt-1 block w-full"
                                                 readOnly
                                             />
                                             <InputError message={errors.key} className="mt-2" />
                                         </div>
                                         <div>
-                                            <InputLabel htmlFor={`value-${setting.id}`} value="Value" />
+                                            
                                             {data.key === "qrCode" ? (
                                                 <>
+                                                <InputLabel htmlFor={`value-${setting.id}`} value="Value" />
                                                     <TextInput
                                                         id={`value-${setting.id}`}
                                                         type="file"
@@ -112,7 +157,87 @@ const Settings = ({ auth }) => {
                                                         />
                                                     )}
                                                 </>
-                                            ) : (
+                                            ) :
+                                            data.key === "bankDatail" ?
+                                            (
+                                                <>
+                                                <InputLabel htmlFor={`accountHolderName-${setting.id}`} value="accountHolderName" />
+                                                <TextInput
+                                                    id={`accountHolderName-${setting.id}`}
+                                                    value={bankDetails.accountHolderName}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, accountHolderName: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`accountNumber-${setting.id}`} value="accountNumber" />
+                                                <TextInput
+                                                    id={`accountNumber-${setting.id}`}
+                                                    value={bankDetails.accountNumber}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, accountNumber: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`bankName-${setting.id}`} value="bankName" />
+                                                <TextInput
+                                                    id={`bankName-${setting.id}`}
+                                                    value={bankDetails.bankName}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, bankName: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`branchName-${setting.id}`} value="branchName" />
+                                                <TextInput
+                                                    id={`branchName-${setting.id}`}
+                                                    value={bankDetails.branchName}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, branchName: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`branchCode-${setting.id}`} value="branchCode" />
+                                                <TextInput
+                                                    id={`branchCode-${setting.id}`}
+                                                    value={bankDetails.branchCode}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, branchCode: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`IFSC-${setting.id}`} value="IFSC" />
+                                                <TextInput
+                                                    id={`IFSC-${setting.id}`}
+                                                    value={bankDetails.IFSC}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, IFSC: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`SWIFT-${setting.id}`} value="SWIFT" />
+                                                <TextInput
+                                                    id={`SWIFT-${setting.id}`}
+                                                    value={bankDetails.SWIFT}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, SWIFT: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`accountType-${setting.id}`} value="accountType" />
+                                                <TextInput
+                                                    id={`accountType-${setting.id}`}
+                                                    value={bankDetails.accountType}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, accountType: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                <InputLabel htmlFor={`currency-${setting.id}`} value="currency" />
+                                                <TextInput
+                                                    id={`currency-${setting.id}`}
+                                                    value={bankDetails.currency}
+                                                    onChange={(e) => setBankDetails((item) => ({ ...item, currency: e.target.value }))}
+                                                    type="text"
+                                                    className="mt-1 block w-full"
+                                                />
+                                                </>
+                                            )
+                                            :(
+                                                <>
+                                                <InputLabel htmlFor={`value-${setting.id}`} value="Value" />
                                                 <TextInput
                                                     id={`value-${setting.id}`}
                                                     value={data.value}
@@ -120,6 +245,7 @@ const Settings = ({ auth }) => {
                                                     type="text"
                                                     className="mt-1 block w-full"
                                                 />
+                                                </>
                                             )}
                                             <InputError message={errors.value} className="mt-2" />
                                         </div>
