@@ -44,7 +44,7 @@ class DashboardController extends Controller
                 'total_balance' => $total_balance,
                 'profit' => Order::where(['profit_loss_status'=>'profit','user_id'=>auth()->id()])->sum('profit_loss_amount'),
                 'loss' => Order::where(['profit_loss_status'=>'loss','user_id'=>auth()->id()])->sum('profit_loss_amount'),
-                'withdrawal' => Transaction::where(['type'=>'withdrawa','status'=>'approved','user_id'=>auth()->id()])->sum('amount'),
+                'withdrawal' => Transaction::where(['type'=>'withdrawal','status'=>'approved','user_id'=>auth()->id()])->sum('amount'),
                 'loan' => $loan,
                 'settings' => $settings,
                 ]);

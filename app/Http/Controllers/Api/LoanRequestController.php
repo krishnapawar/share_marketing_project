@@ -14,7 +14,7 @@ class LoanRequestController extends Controller
     public function index()
     {
         //
-        $loanRequest = LoanRequest::latest('id')->get();
+        $loanRequest = LoanRequest::where('user_id',auth()->id())->latest('id')->get();
         return $this->sendResponse($loanRequest);
     }
 
