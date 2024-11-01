@@ -4,7 +4,7 @@ import { FaAndroid } from 'react-icons/fa';
 const Banner = () => {
     return (
         <div className="flex items-center  flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 mb-4
-         shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
+         shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 ">
             <div className="text-center p-8" >
                 <h1 className="text-4xl font-bold mb-4">Welcome to Our App</h1>
                 <p className="text-lg mb-8">Download our app now and enjoy the best experience.</p>

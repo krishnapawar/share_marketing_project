@@ -1,0 +1,241 @@
+/* Order.module.css */
+
+.orderSection {
+    margin: 21px;
+    padding: 21px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow-y: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px 12px;
+    text-align: left;
+  }
+  
+  th {
+    background: #ffbe76;
+    color: #fff;
+  }
+  
+  tr:not(:first-child):not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .delBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    align-items: end;
+    color: #eb4d4b;
+  }
+  
+  .delBtn:hover {
+    opacity: 0.75;
+  }
+  
+  .delBtn .fa {
+    color: #eb4d4b;
+  }
+  
+  .exportBtn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background: #eee;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .exportBtn:hover {
+    background: #ddd;
+  }
+
+  /*  modul*/
+  .addBtn {
+    padding: 3px 10px !important;
+    background: #6ab04c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0;
+  }
+  .menuItem {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .menuItem:last-child {
+    border-bottom: none;
+  }
+  
+  .menuItem h4, .menuItem p {
+    margin: 8px;
+  }
+  
+  .menuItem .price {
+    margin-left: auto;
+  }
+  
+  /* new css */
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  *::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: rgba(0,0,0,.1);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 9em;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+  
+  body {
+    margin: 0;
+    background: #eee url("http://source.unsplash.com/U9-D7wwurT8/1080x1920") 50% 35%/cover no-repeat padding-box padding-box local;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 21px;
+  }
+  
+  h1 {
+    margin: 0;
+    padding: 21px;
+    background: #eb4d4b;
+    color: #fff;
+    font-family: 'Dancing Script', cursive;
+    font-size: 59px;
+    line-height: 63px;
+    text-align: center;
+  }
+  
+  h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 37px;
+    line-height: 42px;
+    margin-top: 21px;
+    margin-bottom: 21px;
+  }
+  
+  /* main {
+    display: flex;
+    margin: 21px auto 0 auto;
+    max-width: 1024px;
+    max-height: calc(100vh - 126px);
+    flex-direction: row;
+  } */
+  
+  section {
+    margin: 21px;
+    padding: 0 21px 10px 21px;
+    width: calc(50% - 2px);
+    background: rgba(255,255,255,.7);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow-y: auto;
+    width: 89%;
+    max-width: 100%;
+  }
+  
+  #order-list {
+    display: flex;
+    flex-direction: column;
+    margin-right: 0;
+  }
+  
+  table {
+    margin-bottom: 21px;
+    width: 100%;
+    border: none;
+  }
+  
+  table, th, td {
+    border-collapse: collapse;
+  }
+  
+  tr:not(:first-child):not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th, td {
+    padding: 4px 6px;
+    text-align: left;
+  }
+  
+  th {
+    background: #ffbe76;
+    color: #fff;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .menu-item:last-child {
+    border-bottom: none;
+  }
+  
+  .menu-item h4, .menu-item p {
+    margin: 8px;
+  }
+  
+  .menu-item .price {
+    margin-left: auto;
+  }
+  
+  .qty {
+    margin-right: 8px;
+    padding: 2px 4px;
+    width: 40px;
+  }
+  
+  .add-btn {
+    padding: 6px 10px;
+    background: #6ab04c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .del-btn {
+    display: block;
+    text-align: center;
+  }
+  
+  .del-btn:hover { opacity: .75 }
+  
+  .del-btn .fa {
+    color: #eb4d4b; 
+  }
+  
+  #export {
+    margin-top: auto;
+    padding: 3px 5px;
+    background: #eee;
+    border: 1px solid #ddd;
+    align-self: flex-end;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  

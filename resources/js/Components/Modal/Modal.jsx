@@ -31,7 +31,7 @@ export default function Modal({ id="modal", children, show = false, maxWidth = '
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="absolute inset-0 dark:bg-gray-900/75" style={{backgroundColor:"#6b728017"}}/>
+                    <div className="absolute inset-0 /75" style={{backgroundColor:"#6b728017"}}/>
                 </TransitionChild>
 
                 <TransitionChild
@@ -43,7 +43,7 @@ export default function Modal({ id="modal", children, show = false, maxWidth = '
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <DialogPanel
-                        className={`mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass}`}
+                        className={`mb-6 bg-white  rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass}`}
                     >
                         {children}
                         

@@ -123,7 +123,7 @@ const Index = ({ auth }) => {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <h2 className="font-semibold text-xl text-gray-800  leading-tight">
                     Loan Request
                 </h2>
             }
@@ -131,12 +131,12 @@ const Index = ({ auth }) => {
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="flex p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                    <div className="bg-white  overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="flex p-6 bg-white  border-b border-gray-200 ">
                             <UseSearch action={route("loanRequest.index")} />
                         </div>
                         
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                        <div className="p-6 text-gray-900 ">
                             <Table
                                 columns={columns}
                                 data={loanRequests.data}
@@ -154,7 +154,7 @@ const Index = ({ auth }) => {
             >
                 <ModalBody icon={<FaDollarSign />}>
                     <ModalTitle title="Update Load Request" />
-                    <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="p-6 text-gray-900 ">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -231,7 +231,7 @@ const Index = ({ auth }) => {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className="text-sm text-gray-600 ">
                                             Saved.
                                         </p>
                                     </Transition>

@@ -20,13 +20,15 @@ import Swal from "sweetalert2";
 import { FaDollarSign } from "react-icons/fa";
 import TextInput from "@/Components/TextInput";
 import UseSearch from "@/CustomHook/UseSearch";
+import { useEffect } from "react";
 
 const Order = ({ auth }) => {
     const { orders } = usePage().props;
     const confirm = useConfirm();
     let i = 0;
-    const { delete: destroy, post,errors,data, setData, processing, recentlySuccessful,reset } = useForm({
+    const { post,errors,data, setData, processing, recentlySuccessful,reset } = useForm({
         selling_amount:0,
+        sell_price:'',
         id:''
     });
 
@@ -34,15 +36,45 @@ const Order = ({ auth }) => {
         selling_amount: "",
         remark: "",
     });
+    const [profitLossData, setprofitLossData] = useState({
+        status: "",
+        amount: "",
+    });
+ 
+    useEffect(() => {
+        if (statusModelData && data && statusModelData.amount && data.selling_amount) {
+            setprofitLossData((prevData) => {
+                const amount1 = Number(statusModelData.amount);
+                const amount2 = Number(data.selling_amount);
+                
+                console.log(amount1, amount2, amount1 < amount2);
+                
+                let plStatus = amount1 < amount2 ? "profit" : "loss";
+                let plAmount = Math.abs(amount2 - amount1);
+                
+                return {
+                    ...prevData,
+                    amount: plAmount,
+                    status: plStatus,
+                };
+            });
+        }
+    }, [data, statusModelData]);
+    
+    
     const [showModal, setShowModal] = useState(false);
 
     const openStatusModal = (orders) => {
         setStatusModelData(orders);
-        setData('id',orders.id);
+        setData((prevData) => {
+            return { ...prevData, id: orders.id, sell_price: orders.sell_price, selling_amount: orders.selling_amount };
+        });
+        
         setShowModal(true);
     };
     const statusModalClose = () => {
         setShowModal(false);
+        console.log(data);
     };
     const handleSubmit = async (order) => {
         const isConfirmed = await confirm(
@@ -88,9 +120,10 @@ const Order = ({ auth }) => {
             );
         }},
         { key:'currency', label:'Currency'},
-        { key:'Price', label:'price'},
+        { key:'price', label:'Buy Price'},
         { key:'qty', label:'Qty'},
         { key:'amount', label:'Total Amount'},
+        { key:'sell_price', label:'Sell Price'},
         { key:'selling_amount', label:'Selling Amount'},
         { key:'profit_loss_status', label:'Profit/loss Status', render:(item)=>{
             return(
@@ -111,8 +144,9 @@ const Order = ({ auth }) => {
                 <Link
                         onClick={(e) => {
                             e.preventDefault();
-                            !['profit','loss','completed','sell'].includes(item.type) &&
-                                openStatusModal(item);
+                            // !['profit','loss','completed','sell'].includes(item.type) &&
+                            //     openStatusModal(item);
+                            openStatusModal(item);
                         }}
                         className={`${
                             "bg-" + item.type
@@ -147,15 +181,15 @@ const Order = ({ auth }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Orders</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800  leading-tight">Orders</h2>}
             headTitle="Orders"
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="flex p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                    <div className="flex p-6 bg-white  border-b border-gray-200 ">
                         
                         <UseSearch action={route("orders.index")} />
-                        <div className="mt-4 text-gray-900 dark:text-gray-100">
+                        <div className="mt-4 text-gray-900 ">
                             <PrimaryButton>
                                 <Link href={route("orders.create")}>
                                     Add Order
@@ -163,8 +197,8 @@ const Order = ({ auth }) => {
                             </PrimaryButton>
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="bg-white  overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900 ">
                             <Table columns={columns} data={orders.data} paginate={orders} />
                         </div>
                     </div>
@@ -178,7 +212,7 @@ const Order = ({ auth }) => {
             >
                 <ModalBody icon={<FaDollarSign />}>
                     <ModalTitle title="Sell Ordered" />
-                    <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="p-6 text-gray-900 ">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -191,9 +225,22 @@ const Order = ({ auth }) => {
                                 <InputError message={errors.status} className="mt-2" />
                             </div>
                             <div>
+                                <InputLabel htmlFor="sell_price" className="mb-2" value="Selling Price" />
+                                <TextInput type="text" value={data.sell_price || ''} onChange={(e)=>setData('sell_price',e.target.value)}  placeholer="Enter selling Price" min='0'/>
+                                <InputError message={errors.status} className="mt-2" />
+                            </div>
+                            <div>
                                 <InputLabel htmlFor="selling_amount" className="mb-2" value="Selling Amount" />
                                 <TextInput type="text" value={data.selling_amount || ''} onChange={(e)=>setData('selling_amount',e.target.value)}  placeholer="Enter selling amount" min='0'/>
                                 <InputError message={errors.status} className="mt-2" />
+                            </div>
+                            <div>
+                                <div className={`${"bg-" + profitLossData.status } badge  mt-2 block`} style={{marginRight: "44px",padding: "11px"}}>
+                                    <p>
+                                        <span className="text-white">{profitLossData.status}: </span>
+                                        <span className="text-white">{profitLossData.amount}</span>
+                                    </p>
+                                </div>
                             </div>
                             <ModalFooter>
                                 <div className="flex items-center gap-4 mt-4">
@@ -220,7 +267,7 @@ const Order = ({ auth }) => {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className="text-sm text-gray-600 ">
                                             Saved.
                                         </p>
                                     </Transition>

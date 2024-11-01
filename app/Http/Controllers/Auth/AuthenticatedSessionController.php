@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
-        if(auth()->user()->role!=1)
+        if(!in_array(auth()->user()->role,[1,2]))
         {
             auth()->logout();
             return redirect()->back()->with(['error','Invailid credential']);

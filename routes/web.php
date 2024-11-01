@@ -1,5 +1,5 @@
 <?php
-
+// share market
 use App\Http\Controllers\{
     ProfileController,
     SettingController,
@@ -8,7 +8,11 @@ use App\Http\Controllers\{
     TransactionController,
     LoanRequestController
 };
-
+// 
+use App\Http\Controllers\{
+    CategoryController,
+    OrderDetailController
+};
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,6 +26,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/ginni-firework', [CategoryController::class,'ginninFilerWorks']);
+Route::post('/ginninFilerWorkStore', [CategoryController::class,'ginninFilerWorkStore'])->name('ginninFilerWorkStore');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -60,6 +67,22 @@ Route::middleware(['auth','role:1'])->group(function () {
     Route::post('/transactions/updateStatus', [TransactionController::class, 'updateStatus'])->name('transactions.updateStatus');
     Route::post('/updateSetting/{id}', [SettingController::class, 'updateSetting'])->name('updateSetting');
     Route::resource('/loanRequest', LoanRequestController::class);
+    Route::resource('/categories', CategoryController::class);
 });
+
+Route::middleware(['auth','role:2'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('/customers', CustomerController::class);
+    Route::post('/changePassword/{id}', [CustomerController::class,'changePassword'])->name('changePassword');
+    Route::post('/updateWallet', [CustomerController::class,'updateWallet'])->name('updateWallet');
+    Route::resource('/orders', OrderController::class);
+    Route::post('/orders/orderSell', [OrderController::class,'orderSell'])->name('orderSell');
+    Route::resource('/categories', CategoryController::class);
+    Route::resource('/orderDetails', OrderDetailController::class);
+});
+
+
 
 require __DIR__.'/auth.php';

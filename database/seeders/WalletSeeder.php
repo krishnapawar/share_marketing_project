@@ -17,14 +17,6 @@ class WalletSeeder extends Seeder
     {
         // Ensure there are users to assign wallets to
         Wallet::create([
-            'user_id' => 12,
-            'balance' => rand(1000, 10000) / 100,
-            'profit' => rand(100, 1000) / 100,
-            'loss' => rand(50, 500) / 100,
-            'withdrawal' => rand(100, 1000) / 100,
-            'loan' => rand(500, 5000) / 100,
-        ]);
-        Wallet::create([
             'user_id' => 2,
             'balance' => rand(1000, 10000) / 100,
             'profit' => rand(100, 1000) / 100,

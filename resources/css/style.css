@@ -5,8 +5,24 @@
     color: rgb(255 255 255 / var(--tw-text-opacity));
     background-color: rgb(55 65 81 / var(--tw-bg-opacity));
   }
+  .activeInner {
+    transform: scale(0.95) !important; /* Scale down when clicked */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important; /* Add box shadow when clicked */
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+    background-color: #3741517a;
+  }
   
-
+  footer dl,
+  ol,
+  ul {
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0rem;
+  }
+  footer li{
+    margin-bottom: 6px;
+  }
   /* button */
   button {
     margin-right: 5px !important;

@@ -158,15 +158,20 @@ class OrderController extends Controller
             $selling_amount = $request->input('selling_amount');
             $order = Order::find($id);
             $wallet = Wallet::where('user_id',$order->user_id)->first();
-            if($order->status == 'completed' || $order->type == 'sell'){
-                return redirect()->route('orders.index')->with(
-                    'error',
-                    'Order is already completed'
-                );
+            // if($order->status == 'completed' || $order->type == 'sell'){
+            //     return redirect()->route('orders.index')->with(
+            //         'error',
+            //         'Order is already completed'
+            //     );
+            // }
+            $oldSellingAmount =0;
+            if(!empty($order->selling_amount) && $order->selling_amount > 0){
+                $oldSellingAmount = $order->selling_amount;
             }
             $order->status = 'completed';
             $order->selling_amount = $selling_amount;
             $order->profit_loss_status = $order->amount > $selling_amount ? 'loss':'profit';
+            $order->sell_price = $request->sell_price;
             $order->type = 'sell';
             $order->selling_at = now();
             if($order->profit_loss_status == 'loss'){
@@ -177,6 +182,7 @@ class OrderController extends Controller
             $order->save();
             
             if(!empty($wallet)){
+                $wallet->balance -= $oldSellingAmount;
                 $wallet->balance += $selling_amount;
             }else {
                 $wallet = new Wallet;

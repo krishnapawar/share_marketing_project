@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->decimal('remaininng_amount', 15, 2);
             $table->enum('type', ['addFund', 'withdrawal']);
-            $table->enum('status', ['approve', 'disapprove','pending'])->default('pending');
+            $table->enum('status', ['approved', 'disapproved', 'pending', 'cancelled'])->default('pending');
             $table->text('remark')->nullable();
             $table->timestamps();
         });

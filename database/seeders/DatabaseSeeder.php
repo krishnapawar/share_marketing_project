@@ -29,9 +29,10 @@ class DatabaseSeeder extends Seeder
             HelpSupportSeeder::class,
             LoanRequestSeeder::class,
             OrderSeeder::class,
+            TransactionSeeder::class,
             WalletSeeder::class,
             SettingsTableSeeder::class,
-            // TransactionSeeder::class,
+            GinniFireWorks::class
         ]);
     }
 }

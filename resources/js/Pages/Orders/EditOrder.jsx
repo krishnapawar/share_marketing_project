@@ -47,12 +47,12 @@ const EditCustomer = ({ auth }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Create Order</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800  leading-tight">Create Order</h2>}
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="bg-white  overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900 ">
                             <form onSubmit={handleSubmit}>
                                 <div>
                                     <InputLabel htmlFor="date" value="Date" />
@@ -155,7 +155,48 @@ const EditCustomer = ({ auth }) => {
                                         className="mt-1 block w-full"
                                     />
                                     <InputError message={errors.amount} className="mt-2" />
-                                </div>                 
+                                </div>
+                                {
+                                    data.type === 'sell' && (
+                                        <>
+                                        <div>
+                                            <InputLabel htmlFor="price" value="Price" />
+                                            <TextInput
+                                                id="price"
+                                                value={data.price}
+                                                onChange={(e) => setData("price", e.target.value)}
+                                                type="text"
+                                                className="mt-1 block w-full"
+                                                min="0"
+                                            />
+                                            <InputError message={errors.price} className="mt-2" />
+                                        </div>
+                                        <div>
+                                            <InputLabel htmlFor="qty" value="QTY" />
+                                            <TextInput
+                                                id="qty"
+                                                value={data.qty}
+                                                onChange={(e) => setData("qty", e.target.value)}
+                                                type="text"
+                                                className="mt-1 block w-full"
+                                                min="0"
+                                            />
+                                            <InputError message={errors.qty} className="mt-2" />
+                                        </div>
+                                        <div>
+                                            <InputLabel htmlFor="amount" value="Amount" />
+                                            <TextInput
+                                                id="amount"
+                                                value={data.amount}
+                                                onChange={(e) => setData("amount", e.target.value)}
+                                                type="text"
+                                                className="mt-1 block w-full"
+                                            />
+                                            <InputError message={errors.amount} className="mt-2" />
+                                        </div>
+                                        </>
+                                    )
+                                }                 
 
                                 <div className="flex items-center gap-4 mt-4">
                                     <PrimaryButton disabled={processing}>Save</PrimaryButton>
@@ -167,7 +208,7 @@ const EditCustomer = ({ auth }) => {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                                        <p className="text-sm text-gray-600 ">Saved.</p>
                                     </Transition>
                                 </div>
                             </form>

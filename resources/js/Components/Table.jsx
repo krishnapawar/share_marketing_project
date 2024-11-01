@@ -9,32 +9,32 @@ const Table = ({ columns, data, actions=false, paginate=false }) => {
                         {columns.map((column) => (
                             <th
                                 key={column.key}
-                                className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                                className="px-6 py-3 bg-gray-50  text-left text-xs leading-4 font-medium text-gray-500  uppercase tracking-wider"
                             >
                                 {column.label ?? '-'}
                             </th>
                         ))}
                         {actions && (
-                            <th className="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            <th className="px-6 py-3 bg-gray-50  text-left text-xs leading-4 font-medium text-gray-500  uppercase tracking-wider">
                                 Actions
                             </th>
                         )}
                     </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+                <tbody className="bg-white  divide-y divide-gray-200">
                     {data.map((item, index) => (
                         <tr key={index}>
                             {columns.map((column) => (
                                 <td
                                     key={column.key}
-                                    className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400"
+                                    className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 "
                                     data-label={column.label+" :- "}
                                 >
                                     {column.key === 'id' ? index + 1 : (column.render ? column.render(item) : item[column.key] ?? '-')}
                                 </td>
                             ))}
                             {actions && (
-                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 dark:text-gray-400"
+                                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 "
                                     data-label="Actions"
                                 >
                                     {actions(item)}

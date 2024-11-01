@@ -180,7 +180,7 @@ const CustomerList = ({ auth }) => {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                <h2 className="font-semibold text-xl text-gray-800  leading-tight">
                     Customers
                 </h2>
             }
@@ -188,11 +188,11 @@ const CustomerList = ({ auth }) => {
         >
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="flex p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600">
+                    <div className="flex p-6 bg-white  border-b border-gray-200 ">
                         
                         <UseSearch action={route("customers.index")} />
                         
-                        <div className="mt-4 text-gray-900 dark:text-gray-100">
+                        <div className="mt-4 text-gray-900 ">
                             <PrimaryButton>
                                 <Link href={route("customers.create")}>
                                     Add Customer
@@ -200,8 +200,8 @@ const CustomerList = ({ auth }) => {
                             </PrimaryButton>
                         </div>
                     </div>
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="bg-white  overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="p-6 text-gray-900 ">
                             <div className="overflow-x-auto">
                                 <Table
                                     columns={columns}
@@ -225,7 +225,7 @@ const CustomerList = ({ auth }) => {
                     icon={<FaLock />}
                 >
                     <ModalTitle title="Change Password" />
-                    <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="p-6 text-gray-900 ">
                         <form onSubmit={(e) => { e.preventDefault(); submitPassword(); }}>
                             <div>
                                 <InputLabel htmlFor="password" value="Password" />
@@ -266,7 +266,7 @@ const CustomerList = ({ auth }) => {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                                        <p className="text-sm text-gray-600 ">Saved.</p>
                                     </Transition>
                                 </div>
                             </ModalFooter>
@@ -283,7 +283,7 @@ const CustomerList = ({ auth }) => {
             >
                 <ModalBody icon={<FaQuestionCircle />}>
                     <ModalTitle title="Update Account Status" />
-                    <div className="p-6 text-gray-900 dark:text-gray-100">
+                    <div className="p-6 text-gray-900 ">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -331,7 +331,7 @@ const CustomerList = ({ auth }) => {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className="text-sm text-gray-600 ">
                                             Saved.
                                         </p>
                                     </Transition>

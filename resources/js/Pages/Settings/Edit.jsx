@@ -28,18 +28,18 @@ const Edit = ({auth}) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit Setting</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800  leading-tight">Edit Setting</h2>}
         >
             <Head title="Edit Setting" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white  overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="container mx-auto p-4">
                         <header>
-                            <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Setting</h2>
+                            <h2 className="text-lg font-medium text-gray-900 ">Edit Setting</h2>
 
-                            {/* <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                            {/* <p className="mt-1 text-sm text-gray-600 ">
                                 Ensure your account is using a long, random password to stay secure.
                             </p> */}
                         </header>

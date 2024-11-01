@@ -15,8 +15,9 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
+        // dd($role);
         
-        if(((auth()->user()->role != $role && auth()->user()->role != 1) || auth()->user()->status !='actived' ) && $role!=1)
+        if(((auth()->user()->role != $role && auth()->user()->role != 1) && auth()->user()->status !='actived' ) && $role!=1)
         {
             if(auth()->user()->status == 'cancelled'){
                 return response()->json(['message' => 'Your account has been Dispproved by Admin'], 403);
@@ -30,7 +31,7 @@ class CheckRole
                 'message' => 'Unauthorized'
                 ], 401);
         }
-        if(auth()->user()->role!=$role && $role==1)
+        if(auth()->user()->role!=$role && auth()->user()->role!=1)
         {
             auth()->logout();
             abort(401,'Unauthorized');

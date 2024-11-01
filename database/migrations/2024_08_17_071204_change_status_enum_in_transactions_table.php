@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             //
-            DB::statement("ALTER TABLE `transactions` CHANGE `status` `status` ENUM('approved','disapproved','pending','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending';");
+            // DB::statement("ALTER TABLE transactions RENAME COLUMN status TO old_status;");
+            // DB::statement("ALTER TABLE transactions ADD COLUMN status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('approved', 'disapproved', 'pending', 'cancelled'));");
         });
     }
 

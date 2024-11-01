@@ -21,10 +21,10 @@ const ConfirmDialog = ({ message, resolve, icon: Icon }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-60">
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8 w-full max-w-md mx-4">
+            <div className="bg-white  rounded-lg shadow-lg p-8 w-full max-w-md mx-4">
                 <div className="flex flex-col items-center">
-                    <DefaultIcon className="text-5xl text-blue-500 dark:text-blue-400 mb-4" />
-                    <p className="text-lg text-gray-900 dark:text-gray-100 text-center mb-6">{message}</p>
+                    <DefaultIcon className="text-5xl text-blue-500  mb-4" />
+                    <p className="text-lg text-gray-900  text-center mb-6">{message}</p>
                     <div className="flex space-x-4">
                         <button
                             className="bg-red-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-red-700 transition-colors"
